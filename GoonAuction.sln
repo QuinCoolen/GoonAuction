@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoonAuctionAPI", "GoonAucti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoonAuctionBLL", "GoonAuctionBLL\GoonAuctionBLL.csproj", "{BC6F7380-81DA-4727-A67E-9728D6EDCC70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoonAuctionDAL", "GoonAuctionDAL\GoonAuctionDAL.csproj", "{688D1A8B-2778-4B06-B20B-19F7FEDE8530}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BC6F7380-81DA-4727-A67E-9728D6EDCC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC6F7380-81DA-4727-A67E-9728D6EDCC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC6F7380-81DA-4727-A67E-9728D6EDCC70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{688D1A8B-2778-4B06-B20B-19F7FEDE8530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{688D1A8B-2778-4B06-B20B-19F7FEDE8530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{688D1A8B-2778-4B06-B20B-19F7FEDE8530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{688D1A8B-2778-4B06-B20B-19F7FEDE8530}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
