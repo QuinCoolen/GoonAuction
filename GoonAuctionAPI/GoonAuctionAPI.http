@@ -1,0 +1,6 @@
+@GoonAuctionAPI_HostAddress = http://localhost:5218
+
+GET {{GoonAuctionAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
