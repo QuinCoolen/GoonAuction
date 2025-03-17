@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GoonAuctionAPI.Migrations
+namespace GoonAuctionDAL.Migrations
 {
     [DbContext(typeof(DbContext))]
     partial class DbContextModelSnapshot : ModelSnapshot
@@ -16,7 +16,7 @@ namespace GoonAuctionAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

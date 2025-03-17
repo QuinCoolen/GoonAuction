@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GoonAuctionAPI.Migrations
+namespace GoonAuctionDAL.Migrations
 {
     [DbContext(typeof(DbContext))]
-    [Migration("20250226115927_AddAuctionsBidsAndUser")]
-    partial class AddAuctionsBidsAndUser
+    [Migration("20250317110409_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

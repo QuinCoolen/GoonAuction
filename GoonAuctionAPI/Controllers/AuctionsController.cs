@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoonAuctionBLL.Dto;
+using GoonAuctionBLL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,172 +15,115 @@ namespace GoonAuctionAPI.Controllers
     public class AuctionsController : ControllerBase
     {
         private readonly DbContext _context;
+        private readonly IAuctionRepository _auctionRepository;
 
-        public AuctionsController(DbContext context)
+        public AuctionsController(DbContext context, IAuctionRepository auctionRepository)
         {
             _context = context;
+            _auctionRepository = auctionRepository;
         }
 
         // GET: api/Auctions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuctionDto>>> GetAuctions()
+        public List<AuctionViewModel> GetAuctions()
         {
-            var auctions = await _context.Auctions.ToListAsync();
-            List<AuctionDto> auctionDtos = auctions.Select(auction => new AuctionDto
+            List<AuctionDto> auctions = _auctionRepository.GetAuctions();
+
+            List<AuctionViewModel> auctionViewModels = auctions.Select(auction => new AuctionViewModel
             {
                 Id = auction.Id,
                 Title = auction.Title,
                 Description = auction.Description,
-                StartingPrice = auction.Starting_price,
-                CurrentPrice = auction.Current_price,
-                ImageUrl = auction.Image_url,
-                EndDate = auction.End_date,
+                StartingPrice = auction.StartingPrice,
+                CurrentPrice = auction.CurrentPrice,
+                ImageUrl = auction.ImageUrl,
+                EndDate = auction.EndDate,
                 UserId = auction.UserId
             }).ToList();
-            return Ok(auctionDtos);
+
+            return auctionViewModels;
         }
 
         // GET: api/Auctions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuctionDto>> GetAuction(string id)
+        public AuctionViewModel GetAuction(string id)
         {
-            var auction = await _context.Auctions.FindAsync(id);
+            AuctionDto auction = _auctionRepository.GetAuction(id);
 
             if (auction == null)
             {
-                return NotFound();
+                return null;
             }
 
-            var auctionDto = new AuctionDto
+            var auctionViewModel = new AuctionViewModel
             {
                 Id = auction.Id,
                 Title = auction.Title,
                 Description = auction.Description,
-                StartingPrice = auction.Starting_price,
-                CurrentPrice = auction.Current_price,
-                ImageUrl = auction.Image_url,
-                EndDate = auction.End_date,
+                StartingPrice = auction.StartingPrice,
+                CurrentPrice = auction.CurrentPrice,
+                ImageUrl = auction.ImageUrl,
+                EndDate = auction.EndDate,
                 UserId = auction.UserId
             };
-            
-            return auctionDto;
+
+            return auctionViewModel;
         }
 
         // PUT: api/Auctions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuction(string id, AuctionDto auctionDto)
+        public AuctionViewModel PutAuction(string id, AuctionDto auctionDto)
         {
-            if (id != auctionDto.Id)
+            AuctionDto updatedAuction = _auctionRepository.UpdateAuction(id, auctionDto);
+
+            if (updatedAuction == null)
             {
-                return BadRequest();
+                return null;
             }
 
-            var auction = await _context.Auctions.FindAsync(id);
-            if (auction == null)
+            var auctionViewModel = new AuctionViewModel
             {
-                return NotFound();
-            }
+                Id = updatedAuction.Id,
+                Title = updatedAuction.Title,
+                Description = updatedAuction.Description,
+                StartingPrice = updatedAuction.StartingPrice,
+                CurrentPrice = updatedAuction.CurrentPrice,
+                ImageUrl = updatedAuction.ImageUrl,
+                EndDate = updatedAuction.EndDate,
+                UserId = updatedAuction.UserId
+            };
 
-            // Manually update properties from DTO to Entity
-            auction.Title = auctionDto.Title;
-            auction.Description = auctionDto.Description;
-            auction.Starting_price = auctionDto.StartingPrice;
-            auction.Current_price = auctionDto.CurrentPrice;
-            auction.Image_url = auctionDto.ImageUrl;
-            auction.End_date = auctionDto.EndDate;
-            auction.UserId = auctionDto.UserId;
-
-
-            _context.Entry(auction).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AuctionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return auctionViewModel;
         }
 
         // POST: api/Auctions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<AuctionDto>> PostAuction(AuctionDto auctionDto)
+        public AuctionViewModel PostAuction(AuctionDto auctionDto)
         {
-            var auction = new Auction
+            AuctionDto createdAuction = _auctionRepository.CreateAuction(auctionDto);
+
+            var auctionViewModel = new AuctionViewModel
             {
-                Id = auctionDto.Id,
-                Title = auctionDto.Title,
-                Description = auctionDto.Description,
-                Starting_price = auctionDto.StartingPrice,
-                Current_price = auctionDto.CurrentPrice,
-                Image_url = auctionDto.ImageUrl,
-                End_date = auctionDto.EndDate,
-                UserId = auctionDto.UserId
+                Id = createdAuction.Id,
+                Title = createdAuction.Title,
+                Description = createdAuction.Description,
+                StartingPrice = createdAuction.StartingPrice,
+                CurrentPrice = createdAuction.CurrentPrice,
+                ImageUrl = createdAuction.ImageUrl,
+                EndDate = createdAuction.EndDate,
+                UserId = createdAuction.UserId
             };
 
-            _context.Auctions.Add(auction);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (AuctionExists(auction.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            var createdAuctionDto = new AuctionDto
-            {
-                Id = auction.Id,
-                Title = auction.Title,
-                Description = auction.Description,
-                StartingPrice = auction.Starting_price,
-                CurrentPrice = auction.Current_price,
-                ImageUrl = auction.Image_url,
-                EndDate = auction.End_date,
-                UserId = auction.UserId
-            };
-
-            return CreatedAtAction(nameof(GetAuction), new { id = auction.Id }, createdAuctionDto);
+            return auctionViewModel;
         }
 
         // DELETE: api/Auctions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAuction(string id)
+        public bool DeleteAuction(string id)
         {
-            var auction = await _context.Auctions.FindAsync(id);
-            if (auction == null)
-            {
-                return NotFound();
-            }
-
-            _context.Auctions.Remove(auction);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool AuctionExists(string id)
-        {
-            return _context.Auctions.Any(e => e.Id == id);
+            return _auctionRepository.DeleteAuction(id);
         }
     }
 }

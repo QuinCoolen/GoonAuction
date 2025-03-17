@@ -1,5 +1,7 @@
-public class AuctionDto
-{
+using System;
+
+namespace GoonAuctionBLL.Dto {
+  public class AuctionDto {
     public string Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
@@ -7,5 +9,6 @@ public class AuctionDto
     public int CurrentPrice { get; set; }
     public string ImageUrl { get; set; }
     public DateTime EndDate { get; set; }
-    public string UserId { get; set; }
+    public string UserId { get; set; }  
+  }
 }
