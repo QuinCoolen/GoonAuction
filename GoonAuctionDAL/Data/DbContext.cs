@@ -9,17 +9,17 @@ public class DbContext(DbContextOptions<DbContext> options) : IdentityDbContext<
   {
     base.OnModelCreating(modelBuilder);
 
-    modelBuilder.Entity<Auction>()
-      .HasOne(a => a.User)
-      .WithMany(u => u.Auctions)
-      .HasForeignKey(a => a.UserId)
-      .OnDelete(DeleteBehavior.Cascade);
+    // modelBuilder.Entity<Auction>()
+    //   .HasOne(a => a.User)
+    //   .WithMany(u => u.Auctions)
+    //   .HasForeignKey(a => a.UserId)
+    //   .OnDelete(DeleteBehavior.Cascade);
 
-    modelBuilder.Entity<Bid>()
-        .HasOne(b => b.User)
-        .WithMany(u => u.Bids)
-        .HasForeignKey(b => b.UserId)
-        .OnDelete(DeleteBehavior.NoAction);
+    // modelBuilder.Entity<Bid>()
+    //     .HasOne(b => b.User)
+    //     .WithMany(u => u.Bids)
+    //     .HasForeignKey(b => b.UserId)
+    //     .OnDelete(DeleteBehavior.NoAction);
 
     modelBuilder.Entity<Bid>()
         .HasOne(b => b.Auction)

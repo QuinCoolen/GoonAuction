@@ -23,12 +23,11 @@ namespace GoonAuctionDAL
           CurrentPrice = auction.Current_price,
           ImageUrl = auction.Image_url,
           EndDate = auction.End_date,
-          UserId = auction.UserId
       }).ToList();
 
       return auctionDtos;
     }
-    public AuctionDto GetAuction(string id)
+    public AuctionDto GetAuction(int id)
     {
       var auction =  _context.Auctions.Find(id);
 
@@ -46,7 +45,6 @@ namespace GoonAuctionDAL
           CurrentPrice = auction.Current_price,
           ImageUrl = auction.Image_url,
           EndDate = auction.End_date,
-          UserId = auction.UserId
       };
       
       return auctionDto;
@@ -76,7 +74,7 @@ namespace GoonAuctionDAL
       };
     }
 
-    public CreateEditAuctionDto UpdateAuction(string id, CreateEditAuctionDto auctionDto)
+    public CreateEditAuctionDto UpdateAuction(int id, CreateEditAuctionDto auctionDto)
     {
       var auction = _context.Auctions.Find(id);
 
@@ -103,7 +101,7 @@ namespace GoonAuctionDAL
       };
     }
 
-    public bool DeleteAuction(string id)
+    public bool DeleteAuction(int id)
     {
       var auction = _context.Auctions.Find(id);
 

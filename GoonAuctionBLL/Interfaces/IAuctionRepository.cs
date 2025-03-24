@@ -6,9 +6,9 @@ namespace GoonAuctionBLL.Interfaces
   public interface IAuctionRepository
   {
     List<AuctionDto> GetAuctions();
-    AuctionDto GetAuction(string id);
+    AuctionDto GetAuction(int id);
     CreateEditAuctionDto CreateAuction(CreateEditAuctionDto auctionDto);
-    CreateEditAuctionDto UpdateAuction(string id, CreateEditAuctionDto auctionDto);
-    bool DeleteAuction(string id);
+    CreateEditAuctionDto UpdateAuction(int id, CreateEditAuctionDto auctionDto);
+    bool DeleteAuction(int id);
   }
 }

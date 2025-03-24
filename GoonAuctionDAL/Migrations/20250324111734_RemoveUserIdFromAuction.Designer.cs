@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoonAuctionDAL.Migrations
 {
     [DbContext(typeof(DbContext))]
-    [Migration("20250317110409_Initial")]
-    partial class Initial
+    [Migration("20250324111734_RemoveUserIdFromAuction")]
+    partial class RemoveUserIdFromAuction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,7 +91,13 @@ namespace GoonAuctionDAL.Migrations
 
             modelBuilder.Entity("Auction", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Current_price")
@@ -115,38 +121,35 @@ namespace GoonAuctionDAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Auctions");
                 });
 
             modelBuilder.Entity("Bid", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<string>("AuctionId")
-                        .IsRequired()
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AuctionId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuctionId");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AuctionId");
 
                     b.ToTable("Bids");
                 });
@@ -286,32 +289,24 @@ namespace GoonAuctionDAL.Migrations
 
             modelBuilder.Entity("Auction", b =>
                 {
-                    b.HasOne("ApplicationUser", "User")
+                    b.HasOne("ApplicationUser", null)
                         .WithMany("Auctions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Bid", b =>
                 {
+                    b.HasOne("ApplicationUser", null)
+                        .WithMany("Bids")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Auction", "Auction")
                         .WithMany("Bids")
                         .HasForeignKey("AuctionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ApplicationUser", "User")
-                        .WithMany("Bids")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("Auction");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

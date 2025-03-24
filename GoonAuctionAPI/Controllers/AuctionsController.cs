@@ -38,7 +38,6 @@ namespace GoonAuctionAPI.Controllers
                 CurrentPrice = auction.CurrentPrice,
                 ImageUrl = auction.ImageUrl,
                 EndDate = auction.EndDate,
-                UserId = auction.UserId
             }).ToList();
 
             return auctionViewModels;
@@ -46,7 +45,7 @@ namespace GoonAuctionAPI.Controllers
 
         // GET: api/Auctions/5
         [HttpGet("{id}")]
-        public AuctionViewModel GetAuction(string id)
+        public AuctionViewModel GetAuction(int id)
         {
             AuctionDto auction = _auctionRepository.GetAuction(id);
 
@@ -64,7 +63,6 @@ namespace GoonAuctionAPI.Controllers
                 CurrentPrice = auction.CurrentPrice,
                 ImageUrl = auction.ImageUrl,
                 EndDate = auction.EndDate,
-                UserId = auction.UserId
             };
 
             return auctionViewModel;
@@ -73,7 +71,7 @@ namespace GoonAuctionAPI.Controllers
         // PUT: api/Auctions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public AuctionViewModel PutAuction(string id, CreateEditAuctionDto auctionDto)
+        public AuctionViewModel PutAuction(int id, CreateEditAuctionDto auctionDto)
         {
             CreateEditAuctionDto updatedAuction = _auctionRepository.UpdateAuction(id, auctionDto);
 
@@ -115,7 +113,7 @@ namespace GoonAuctionAPI.Controllers
 
         // DELETE: api/Auctions/5
         [HttpDelete("{id}")]
-        public bool DeleteAuction(string id)
+        public bool DeleteAuction(int id)
         {
             return _auctionRepository.DeleteAuction(id);
         }

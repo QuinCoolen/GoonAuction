@@ -14,7 +14,7 @@ namespace GoonAuctionBLL.Services {
       return _auctionRepository.GetAuctions();
     }
 
-    public AuctionDto GetAuction(string id) {
+    public AuctionDto GetAuction(int id) {
       return _auctionRepository.GetAuction(id);
     }
 
@@ -22,11 +22,11 @@ namespace GoonAuctionBLL.Services {
       return _auctionRepository.CreateAuction(auctionDto);
     }
 
-    public CreateEditAuctionDto UpdateAuction(string id, CreateEditAuctionDto auctionDto) {
+    public CreateEditAuctionDto UpdateAuction(int id, CreateEditAuctionDto auctionDto) {
       return _auctionRepository.UpdateAuction(id, auctionDto);
     }
 
-    public bool DeleteAuction(string id) {
+    public bool DeleteAuction(int id) {
       return _auctionRepository.DeleteAuction(id);
     }
   }
