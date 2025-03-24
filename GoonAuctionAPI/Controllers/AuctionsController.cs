@@ -73,9 +73,9 @@ namespace GoonAuctionAPI.Controllers
         // PUT: api/Auctions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public AuctionViewModel PutAuction(string id, AuctionDto auctionDto)
+        public AuctionViewModel PutAuction(string id, CreateEditAuctionDto auctionDto)
         {
-            AuctionDto updatedAuction = _auctionRepository.UpdateAuction(id, auctionDto);
+            CreateEditAuctionDto updatedAuction = _auctionRepository.UpdateAuction(id, auctionDto);
 
             if (updatedAuction == null)
             {
@@ -84,14 +84,11 @@ namespace GoonAuctionAPI.Controllers
 
             var auctionViewModel = new AuctionViewModel
             {
-                Id = updatedAuction.Id,
                 Title = updatedAuction.Title,
                 Description = updatedAuction.Description,
                 StartingPrice = updatedAuction.StartingPrice,
-                CurrentPrice = updatedAuction.CurrentPrice,
                 ImageUrl = updatedAuction.ImageUrl,
                 EndDate = updatedAuction.EndDate,
-                UserId = updatedAuction.UserId
             };
 
             return auctionViewModel;
@@ -100,20 +97,17 @@ namespace GoonAuctionAPI.Controllers
         // POST: api/Auctions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public AuctionViewModel PostAuction(AuctionDto auctionDto)
+        public CreateEditAuctionViewModel PostAuction(CreateEditAuctionDto auctionDto)
         {
-            AuctionDto createdAuction = _auctionRepository.CreateAuction(auctionDto);
+            CreateEditAuctionDto createdAuction = _auctionRepository.CreateAuction(auctionDto);
 
-            var auctionViewModel = new AuctionViewModel
+            var auctionViewModel = new CreateEditAuctionViewModel
             {
-                Id = createdAuction.Id,
                 Title = createdAuction.Title,
                 Description = createdAuction.Description,
                 StartingPrice = createdAuction.StartingPrice,
-                CurrentPrice = createdAuction.CurrentPrice,
                 ImageUrl = createdAuction.ImageUrl,
                 EndDate = createdAuction.EndDate,
-                UserId = createdAuction.UserId
             };
 
             return auctionViewModel;

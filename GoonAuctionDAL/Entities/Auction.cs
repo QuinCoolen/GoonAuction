@@ -1,5 +1,10 @@
-public class Auction {
+using System.ComponentModel.DataAnnotations;
+
+public class Auction
+{
+  [Key]
   public string Id { get; set; }
+  [Required]
   public string Title { get; set; }
   public string Description { get; set; }
   public int Starting_price { get; set; }

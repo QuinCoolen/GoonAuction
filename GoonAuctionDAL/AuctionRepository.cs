@@ -51,37 +51,32 @@ namespace GoonAuctionDAL
       
       return auctionDto;
     }
-    public AuctionDto CreateAuction(AuctionDto auctionDto)
+    public CreateEditAuctionDto CreateAuction(CreateEditAuctionDto auctionDto)
     {
       var auction = new Auction
       {
           Title = auctionDto.Title,
           Description = auctionDto.Description,
           Starting_price = auctionDto.StartingPrice,
-          Current_price = auctionDto.CurrentPrice,
           Image_url = auctionDto.ImageUrl,
           End_date = auctionDto.EndDate,
-          UserId = auctionDto.UserId
       };
 
       _context.Auctions.Add(auction);
 
       _context.SaveChanges();
 
-      return new AuctionDto
+      return new CreateEditAuctionDto
       {
-          Id = auction.Id,
           Title = auction.Title,
           Description = auction.Description,
           StartingPrice = auction.Starting_price,
-          CurrentPrice = auction.Current_price,
           ImageUrl = auction.Image_url,
           EndDate = auction.End_date,
-          UserId = auction.UserId
       };
     }
 
-    public AuctionDto UpdateAuction(string id, AuctionDto auctionDto)
+    public CreateEditAuctionDto UpdateAuction(string id, CreateEditAuctionDto auctionDto)
     {
       var auction = _context.Auctions.Find(id);
 
@@ -93,23 +88,18 @@ namespace GoonAuctionDAL
       auction.Title = auctionDto.Title;
       auction.Description = auctionDto.Description;
       auction.Starting_price = auctionDto.StartingPrice;
-      auction.Current_price = auctionDto.CurrentPrice;
       auction.Image_url = auctionDto.ImageUrl;
       auction.End_date = auctionDto.EndDate;
-      auction.UserId = auctionDto.UserId;
 
       _context.SaveChanges();
 
-      return new AuctionDto
+      return new CreateEditAuctionDto
       {
-          Id = auction.Id,
           Title = auction.Title,
           Description = auction.Description,
           StartingPrice = auction.Starting_price,
-          CurrentPrice = auction.Current_price,
           ImageUrl = auction.Image_url,
           EndDate = auction.End_date,
-          UserId = auction.UserId
       };
     }
 

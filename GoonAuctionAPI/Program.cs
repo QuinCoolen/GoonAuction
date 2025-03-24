@@ -1,3 +1,6 @@
+using GoonAuctionBLL.Interfaces;
+using GoonAuctionBLL.Services;
+using GoonAuctionDAL;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +21,9 @@ builder.Services.AddCors();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<AuctionService>();
+builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
 
 var app = builder.Build();
 

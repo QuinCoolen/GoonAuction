@@ -18,11 +18,11 @@ namespace GoonAuctionBLL.Services {
       return _auctionRepository.GetAuction(id);
     }
 
-    public AuctionDto CreateAuction(AuctionDto auctionDto) {
+    public CreateEditAuctionDto CreateAuction(CreateEditAuctionDto auctionDto) {
       return _auctionRepository.CreateAuction(auctionDto);
     }
 
-    public AuctionDto UpdateAuction(string id, AuctionDto auctionDto) {
+    public CreateEditAuctionDto UpdateAuction(string id, CreateEditAuctionDto auctionDto) {
       return _auctionRepository.UpdateAuction(id, auctionDto);
     }
 
