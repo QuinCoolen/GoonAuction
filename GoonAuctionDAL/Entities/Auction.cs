@@ -10,7 +10,7 @@ public class Auction
   public int Current_price { get; set; }
   public string Image_url { get; set; }
   public DateTime End_date { get; set; }
-  // public string UserId { get; set; }  
-  // public ApplicationUser User { get; set; }
+  public string UserId { get; set; }  
+  public ApplicationUser User { get; set; }
   public ICollection<Bid> Bids { get; set; }
 }
