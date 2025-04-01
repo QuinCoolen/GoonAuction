@@ -7,8 +7,8 @@ namespace GoonAuctionBLL.Interfaces
   {
     List<AuctionDto> GetAuctions();
     AuctionDto GetAuction(int id);
-    CreateEditAuctionDto CreateAuction(CreateEditAuctionDto auctionDto);
-    CreateEditAuctionDto UpdateAuction(int id, CreateEditAuctionDto auctionDto);
+    AuctionDto CreateAuction(CreateEditAuctionDto createEditAuctionDto);
+    AuctionDto UpdateAuction(int id, CreateEditAuctionDto createEditAuctionDto);
     bool DeleteAuction(int id);
   }
 }

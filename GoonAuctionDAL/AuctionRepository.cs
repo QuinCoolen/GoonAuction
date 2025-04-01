@@ -49,23 +49,24 @@ namespace GoonAuctionDAL
       
       return auctionDto;
     }
-    public CreateEditAuctionDto CreateAuction(CreateEditAuctionDto auctionDto)
+    public AuctionDto CreateAuction(CreateEditAuctionDto createEditAuctionDto)
     {
       var auction = new Auction
       {
-          Title = auctionDto.Title,
-          Description = auctionDto.Description,
-          Starting_price = auctionDto.StartingPrice,
-          Image_url = auctionDto.ImageUrl,
-          End_date = auctionDto.EndDate,
+          Title = createEditAuctionDto.Title,
+          Description = createEditAuctionDto.Description,
+          Starting_price = createEditAuctionDto.StartingPrice,
+          Image_url = createEditAuctionDto.ImageUrl,
+          End_date = createEditAuctionDto.EndDate,
       };
 
       _context.Auctions.Add(auction);
 
       _context.SaveChanges();
 
-      return new CreateEditAuctionDto
+      return new AuctionDto
       {
+          Id = auction.Id,
           Title = auction.Title,
           Description = auction.Description,
           StartingPrice = auction.Starting_price,
@@ -74,7 +75,7 @@ namespace GoonAuctionDAL
       };
     }
 
-    public CreateEditAuctionDto UpdateAuction(int id, CreateEditAuctionDto auctionDto)
+    public AuctionDto UpdateAuction(int id, CreateEditAuctionDto createEditAuctionDto)
     {
       var auction = _context.Auctions.Find(id);
 
@@ -83,16 +84,17 @@ namespace GoonAuctionDAL
           return null;
       }
 
-      auction.Title = auctionDto.Title;
-      auction.Description = auctionDto.Description;
-      auction.Starting_price = auctionDto.StartingPrice;
-      auction.Image_url = auctionDto.ImageUrl;
-      auction.End_date = auctionDto.EndDate;
+      auction.Title = createEditAuctionDto.Title;
+      auction.Description = createEditAuctionDto.Description;
+      auction.Starting_price = createEditAuctionDto.StartingPrice;
+      auction.Image_url = createEditAuctionDto.ImageUrl;
+      auction.End_date = createEditAuctionDto.EndDate;
 
       _context.SaveChanges();
 
-      return new CreateEditAuctionDto
+      return new AuctionDto
       {
+          Id = auction.Id,
           Title = auction.Title,
           Description = auction.Description,
           StartingPrice = auction.Starting_price,
