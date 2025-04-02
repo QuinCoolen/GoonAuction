@@ -8,9 +8,9 @@ namespace GoonAuctionBLL.Interfaces
     List<UserDto> GetUsers();
     UserDto GetUser(string id);
     UserDto GetUserByEmail(string email);
-    UserDto CreateUser(CreateEditUserDto createEditUserDto);
-    UserDto UpdateUser(string id, CreateEditUserDto createEditUserDto);
-    bool DeleteUser(string id);
+    void CreateUser(CreateEditUserDto createEditUserDto);
+    void UpdateUser(string id, CreateEditUserDto createEditUserDto);
+    void DeleteUser(string id);
   }
 }
 

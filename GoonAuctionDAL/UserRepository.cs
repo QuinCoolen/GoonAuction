@@ -27,7 +27,7 @@ namespace GoonAuctionDAL
       var user = _context.Users.Find(id);
       if (user == null)
       {
-        return null;
+        throw new Exception("User not found");
       }
 
       return new UserDto
@@ -44,7 +44,7 @@ namespace GoonAuctionDAL
 
       if (user == null)
       {
-        return null;
+        throw new Exception("User not found");
       }
 
       return new UserDto
@@ -55,7 +55,7 @@ namespace GoonAuctionDAL
       };
     }
 
-    public UserDto CreateUser(CreateEditUserDto createEditUserDto)
+    public void CreateUser(CreateEditUserDto createEditUserDto)
     {
       var user = new ApplicationUser
       {
@@ -66,21 +66,14 @@ namespace GoonAuctionDAL
 
       _context.Users.Add(user);
       _context.SaveChanges();
-
-      return new UserDto
-      {
-        Id = user.Id,
-        UserName = user.UserName,
-        Email = user.Email,
-      };
     }
 
-    public UserDto UpdateUser(string id, CreateEditUserDto createEditUserDto)
+    public void UpdateUser(string id, CreateEditUserDto createEditUserDto)
     {
       var user = _context.Users.Find(id);
       if (user == null)
       {
-        return null;
+        throw new Exception("User not found");
       }
 
       user.UserName = createEditUserDto.UserName;
@@ -88,27 +81,18 @@ namespace GoonAuctionDAL
       user.PasswordHash = createEditUserDto.Password;
 
       _context.SaveChanges();
-
-      return new UserDto
-      {
-        Id = user.Id,
-        UserName = user.UserName,
-        Email = user.Email,
-      };
     }
 
-    public bool DeleteUser(string id)
+    public void DeleteUser(string id)
     {
       var user = _context.Users.Find(id);
       if (user == null)
       {
-        return false;
+        throw new Exception("User not found");
       }
 
       _context.Users.Remove(user);
       _context.SaveChanges();
-
-      return true;
     }
   }
 }
