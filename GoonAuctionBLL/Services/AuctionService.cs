@@ -3,7 +3,7 @@ using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
 
 namespace GoonAuctionBLL.Services {
-  public class AuctionService : IAuctionRepository {
+  public class AuctionService {
     private readonly IAuctionRepository _auctionRepository;
 
     public AuctionService(IAuctionRepository auctionRepository) {

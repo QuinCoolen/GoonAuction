@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
+using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,19 +16,19 @@ namespace GoonAuctionAPI.Controllers
     public class AuctionsController : ControllerBase
     {
         private readonly DbContext _context;
-        private readonly IAuctionRepository _auctionRepository;
+        private readonly AuctionService _auctionService;
 
-        public AuctionsController(DbContext context, IAuctionRepository auctionRepository)
+        public AuctionsController(DbContext context, AuctionService auctionService)
         {
             _context = context;
-            _auctionRepository = auctionRepository;
+            _auctionService = auctionService;
         }
 
         // GET: api/Auctions
         [HttpGet]
         public List<AuctionViewModel> GetAuctions()
         {
-            List<AuctionDto> auctions = _auctionRepository.GetAuctions();
+            List<AuctionDto> auctions = _auctionService.GetAuctions();
 
             List<AuctionViewModel> auctionViewModels = auctions.Select(auction => new AuctionViewModel
             {
@@ -47,7 +48,7 @@ namespace GoonAuctionAPI.Controllers
         [HttpGet("{id}")]
         public AuctionViewModel GetAuction(int id)
         {
-            AuctionDto auction = _auctionRepository.GetAuction(id);
+            AuctionDto auction = _auctionService.GetAuction(id);
 
             if (auction == null)
             {
@@ -71,51 +72,27 @@ namespace GoonAuctionAPI.Controllers
         // PUT: api/Auctions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public AuctionViewModel PutAuction(int id, CreateEditAuctionDto auctionDto)
+        public IActionResult PutAuction(int id, CreateEditAuctionDto auctionDto)
         {
-            CreateEditAuctionDto updatedAuction = _auctionRepository.UpdateAuction(id, auctionDto);
-
-            if (updatedAuction == null)
-            {
-                return null;
-            }
-
-            var auctionViewModel = new AuctionViewModel
-            {
-                Title = updatedAuction.Title,
-                Description = updatedAuction.Description,
-                StartingPrice = updatedAuction.StartingPrice,
-                ImageUrl = updatedAuction.ImageUrl,
-                EndDate = updatedAuction.EndDate,
-            };
-
-            return auctionViewModel;
+            _auctionService.UpdateAuction(id, auctionDto);
+            return Ok();
         }
 
         // POST: api/Auctions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public CreateEditAuctionViewModel PostAuction(CreateEditAuctionDto auctionDto)
+        public IActionResult PostAuction(CreateEditAuctionDto auctionDto)
         {
-            CreateEditAuctionDto createdAuction = _auctionRepository.CreateAuction(auctionDto);
-
-            var auctionViewModel = new CreateEditAuctionViewModel
-            {
-                Title = createdAuction.Title,
-                Description = createdAuction.Description,
-                StartingPrice = createdAuction.StartingPrice,
-                ImageUrl = createdAuction.ImageUrl,
-                EndDate = createdAuction.EndDate,
-            };
-
-            return auctionViewModel;
+            _auctionService.CreateAuction(auctionDto);
+            return Ok();
         }
 
         // DELETE: api/Auctions/5
         [HttpDelete("{id}")]
-        public bool DeleteAuction(int id)
+        public IActionResult DeleteAuction(int id)
         {
-            return _auctionRepository.DeleteAuction(id);
+            _auctionService.DeleteAuction(id);
+            return Ok();
         }
     }
 }
