@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
@@ -42,6 +43,23 @@ namespace GoonAuctionBLL.Services
     {
       _userRepository.DeleteUser(id);
     }
+
+     public void UpdateRefreshToken(string userId, string refreshToken, DateTime expiry)
+        {
+            UserDto user = _userRepository.GetUser(userId);
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            CreateEditUserDto createEditUserDTO = new CreateEditUserDto
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                RefreshToken = refreshToken,
+                RefreshTokenExpiryTime = expiry
+            };
+
+            _userRepository.UpdateUser(user.Id, createEditUserDTO);
+        }
   }
 }
 

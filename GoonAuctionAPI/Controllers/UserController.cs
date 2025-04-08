@@ -32,5 +32,26 @@ namespace GoonAuctionAPI.Controllers
         {
             return Ok(_userService.GetUserByEmail(email));
         }
+
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] CreateEditUserDto userDto)
+        {
+            _userService.CreateUser(userDto);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(string id, [FromBody] CreateEditUserDto userDto)
+        {
+            _userService.UpdateUser(id, userDto);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(string id)
+        {
+            _userService.DeleteUser(id);
+            return Ok();    
+        }
     }
 }
