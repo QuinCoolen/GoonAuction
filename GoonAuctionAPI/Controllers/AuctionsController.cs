@@ -75,7 +75,7 @@ namespace GoonAuctionAPI.Controllers
         public IActionResult PutAuction(int id, CreateEditAuctionDto auctionDto)
         {
             _auctionService.UpdateAuction(id, auctionDto);
-            return Ok();
+            return NoContent();
         }
 
         // POST: api/Auctions
@@ -84,7 +84,7 @@ namespace GoonAuctionAPI.Controllers
         public IActionResult PostAuction(CreateEditAuctionDto auctionDto)
         {
             _auctionService.CreateAuction(auctionDto);
-            return Ok();
+            return NoContent();
         }
 
         // DELETE: api/Auctions/5
@@ -92,7 +92,7 @@ namespace GoonAuctionAPI.Controllers
         public IActionResult DeleteAuction(int id)
         {
             _auctionService.DeleteAuction(id);
-            return Ok();
+            return NoContent();
         }
     }
 }

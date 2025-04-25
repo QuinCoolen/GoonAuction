@@ -7,5 +7,6 @@ namespace GoonAuctionBLL.Dto {
     public int StartingPrice { get; set; }
     public string ImageUrl { get; set; }
     public DateTime EndDate { get; set; }
+    public string UserId { get; set; }
   }
 }

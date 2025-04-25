@@ -58,6 +58,7 @@ namespace GoonAuctionDAL
           Starting_price = createEditAuctionDto.StartingPrice,
           Image_url = createEditAuctionDto.ImageUrl,
           End_date = createEditAuctionDto.EndDate,
+          UserId = createEditAuctionDto.UserId,
       };
 
       _context.Auctions.Add(auction);
