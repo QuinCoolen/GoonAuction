@@ -5,7 +5,7 @@ using GoonAuctionBLL.Interfaces;
 
 namespace GoonAuctionBLL.Services
 {
-  public class UserService : IUserRepository
+  public class UserService
   {
     private readonly IUserRepository _userRepository;
 
@@ -44,22 +44,39 @@ namespace GoonAuctionBLL.Services
       _userRepository.DeleteUser(id);
     }
 
+    public void SaveRefreshToken(string userId, string refreshToken, DateTime expiry)
+    {
+      UserDto user = _userRepository.GetUser(userId);
+      if (user == null)
+          throw new ArgumentException("User not found");
+
+      CreateEditUserDto createEditUserDTO = new CreateEditUserDto
+      {
+          Email = user.Email,
+          UserName = user.UserName,
+          RefreshToken = refreshToken,
+          RefreshTokenExpiryTime = expiry
+      };
+
+      _userRepository.UpdateUser(user.Id, createEditUserDTO);
+    }
+
      public void UpdateRefreshToken(string userId, string refreshToken, DateTime expiry)
-        {
-            UserDto user = _userRepository.GetUser(userId);
-            if (user == null)
-                throw new ArgumentException("User not found");
+    {
+      UserDto user = _userRepository.GetUser(userId);
+      if (user == null)
+          throw new ArgumentException("User not found");
 
-            CreateEditUserDto createEditUserDTO = new CreateEditUserDto
-            {
-                Email = user.Email,
-                UserName = user.UserName,
-                RefreshToken = refreshToken,
-                RefreshTokenExpiryTime = expiry
-            };
+      CreateEditUserDto createEditUserDTO = new CreateEditUserDto
+      {
+          Email = user.Email,
+          UserName = user.UserName,
+          RefreshToken = refreshToken,
+          RefreshTokenExpiryTime = expiry
+      };
 
-            _userRepository.UpdateUser(user.Id, createEditUserDTO);
-        }
+      _userRepository.UpdateUser(user.Id, createEditUserDTO);
+    }
   }
 }
 

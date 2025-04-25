@@ -20,7 +20,7 @@ namespace GoonAuctionAPI.Controllers
       [HttpPost("login")]
       public IActionResult Login([FromBody] LoginUserDto model)
       {
-        var user = _userService.GetUserByEmail(model.Email);
+        UserDto user = _userService.GetUserByEmail(model.Email);
         if (user == null)
         {
             return Unauthorized();
@@ -30,7 +30,23 @@ namespace GoonAuctionAPI.Controllers
         var refreshToken = _authService.GenerateRefreshToken();
         var refreshTokenExpiration = DateTime.UtcNow.AddDays(7);
 
-        
+        HttpContext.Response.Cookies.Append("jwt", token, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = refreshTokenExpiration
+        });
+
+        _userService.SaveRefreshToken(user.Id, refreshToken, refreshTokenExpiration);
+
+        HttpContext.Response.Cookies.Append("refresh", refreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = refreshTokenExpiration
+        });
 
         return Ok(new { Message = "Login successful", Token = token, RefreshToken = refreshToken, RefreshTokenExpiration = refreshTokenExpiration });
       }
