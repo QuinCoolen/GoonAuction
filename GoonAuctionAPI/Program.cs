@@ -63,11 +63,13 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
+app.UseCors(options => options.WithOrigins("http://frontend:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Urls.Add("http://*:8080");
 
 app.Run();
