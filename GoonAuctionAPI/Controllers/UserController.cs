@@ -33,18 +33,15 @@ namespace GoonAuctionAPI.Controllers
         [HttpGet("me")]
         public IActionResult GetMe()
         {
-            // 1. Get the user ID from the JWT claims
             Claim? userId = User.FindFirst(ClaimTypes.NameIdentifier);
-            Console.WriteLine("UserId" + userId?.Value);
+            
             if (userId == null)
                 return Unauthorized();
 
-            // 2. Fetch the user from the database
             var user = _userService.GetUser(userId.Value);
             if (user == null)
                 return NotFound();
 
-            // 3. Return the user info (customize as needed)
             return Ok(new
             {
                 id = user.Id,
