@@ -50,6 +50,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // your frontend URL
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // crucial for cookies
+    });
+});
+
 
 var app = builder.Build();
 
@@ -63,13 +74,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors(options => options.WithOrigins("http://frontend:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.Urls.Add("http://*:8080");
 
 app.Run();

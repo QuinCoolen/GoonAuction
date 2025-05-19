@@ -33,8 +33,8 @@ namespace GoonAuctionAPI.Controllers
         HttpContext.Response.Cookies.Append("jwt", token, new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None,
+            Secure = false,
+            SameSite = SameSiteMode.Lax,
             Expires = refreshTokenExpiration
         });
 
@@ -43,8 +43,8 @@ namespace GoonAuctionAPI.Controllers
         HttpContext.Response.Cookies.Append("refresh", refreshToken, new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None,
+            Secure = false,
+            SameSite = SameSiteMode.Lax,
             Expires = refreshTokenExpiration
         });
 
