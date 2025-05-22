@@ -55,20 +55,20 @@ namespace GoonAuctionDAL
       };
     }
 
-    public void CreateUser(CreateEditUserDto createEditUserDto)
+    public void CreateUser(RegisterUserDto EditUserDto)
     {
       var user = new ApplicationUser
       {
-        UserName = createEditUserDto.UserName,
-        Email = createEditUserDto.Email,
-        PasswordHash = createEditUserDto.Password,
+        UserName = EditUserDto.UserName,
+        Email = EditUserDto.Email,
+        PasswordHash = EditUserDto.Password,
       };
 
       _context.Users.Add(user);
       _context.SaveChanges();
     }
 
-    public void UpdateUser(string id, CreateEditUserDto createEditUserDto)
+    public void UpdateUser(string id, EditUserDto EditUserDto)
     {
       var user = _context.Users.Find(id);
       if (user == null)
@@ -76,9 +76,9 @@ namespace GoonAuctionDAL
         throw new Exception("User not found");
       }
 
-      user.UserName = createEditUserDto.UserName;
-      user.Email = createEditUserDto.Email;
-      user.PasswordHash = createEditUserDto.Password;
+      user.UserName = EditUserDto.UserName;
+      user.Email = EditUserDto.Email;
+      user.PasswordHash = EditUserDto.Password;
 
       _context.SaveChanges();
     }

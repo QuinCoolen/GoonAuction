@@ -29,14 +29,14 @@ namespace GoonAuctionBLL.Services
       return _userRepository.GetUserByEmail(email);
     }
 
-    public void CreateUser(CreateEditUserDto createEditUserDto)
+    public void CreateUser(RegisterUserDto EditUserDto)
     {
-      _userRepository.CreateUser(createEditUserDto);
+      _userRepository.CreateUser(EditUserDto);
     }
 
-    public void UpdateUser(string id, CreateEditUserDto createEditUserDto)
+    public void UpdateUser(string id, EditUserDto EditUserDto)
     {
-      _userRepository.UpdateUser(id, createEditUserDto);
+      _userRepository.UpdateUser(id, EditUserDto);
     }
 
     public void DeleteUser(string id)
@@ -50,7 +50,7 @@ namespace GoonAuctionBLL.Services
       if (user == null)
           throw new ArgumentException("User not found");
 
-      CreateEditUserDto createEditUserDTO = new CreateEditUserDto
+      EditUserDto EditUserDto = new EditUserDto
       {
           Email = user.Email,
           UserName = user.UserName,
@@ -58,7 +58,7 @@ namespace GoonAuctionBLL.Services
           RefreshTokenExpiryTime = expiry
       };
 
-      _userRepository.UpdateUser(user.Id, createEditUserDTO);
+      _userRepository.UpdateUser(user.Id, EditUserDto);
     }
 
      public void UpdateRefreshToken(string userId, string refreshToken, DateTime expiry)
@@ -67,7 +67,7 @@ namespace GoonAuctionBLL.Services
       if (user == null)
           throw new ArgumentException("User not found");
 
-      CreateEditUserDto createEditUserDTO = new CreateEditUserDto
+      EditUserDto EditUserDto = new EditUserDto
       {
           Email = user.Email,
           UserName = user.UserName,
@@ -75,7 +75,7 @@ namespace GoonAuctionBLL.Services
           RefreshTokenExpiryTime = expiry
       };
 
-      _userRepository.UpdateUser(user.Id, createEditUserDTO);
+      _userRepository.UpdateUser(user.Id, EditUserDto);
     }
   }
 }

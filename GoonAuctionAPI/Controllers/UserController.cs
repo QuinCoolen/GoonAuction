@@ -57,14 +57,14 @@ namespace GoonAuctionAPI.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] CreateEditUserDto userDto)
+        public IActionResult Register([FromBody] RegisterUserDto userDto)
         {
             _userService.CreateUser(userDto);
-            return NoContent();
+            return Ok(new { Message = "User created successfully" });
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(string id, [FromBody] CreateEditUserDto userDto)
+        public IActionResult UpdateUser(string id, [FromBody] EditUserDto userDto)
         {
             _userService.UpdateUser(id, userDto);
             return NoContent();
