@@ -34,7 +34,7 @@ namespace GoonAuctionAPI.Controllers
         {
             HttpOnly = true,
             Secure = false,
-            SameSite = SameSiteMode.Lax,
+            SameSite = SameSiteMode.Unspecified,
             Expires = refreshTokenExpiration
         });
 
@@ -44,7 +44,7 @@ namespace GoonAuctionAPI.Controllers
         {
             HttpOnly = true,
             Secure = false,
-            SameSite = SameSiteMode.Lax,
+            SameSite = SameSiteMode.Unspecified,
             Expires = refreshTokenExpiration
         });
 
