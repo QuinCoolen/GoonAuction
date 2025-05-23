@@ -15,12 +15,10 @@ namespace GoonAuctionAPI.Controllers
     [ApiController]
     public class AuctionsController : ControllerBase
     {
-        private readonly DbContext _context;
         private readonly AuctionService _auctionService;
 
-        public AuctionsController(DbContext context, AuctionService auctionService)
+        public AuctionsController(AuctionService auctionService)
         {
-            _context = context;
             _auctionService = auctionService;
         }
 
