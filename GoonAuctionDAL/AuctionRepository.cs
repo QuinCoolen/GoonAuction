@@ -1,5 +1,6 @@
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace GoonAuctionDAL
 {
@@ -27,24 +28,30 @@ namespace GoonAuctionDAL
 
       return auctionDtos;
     }
-    public AuctionDto GetAuction(int id)
+    public FullAuctionDto GetAuction(int id)
     {
-      var auction =  _context.Auctions.Find(id);
-
+      Auction? auction =  _context.Auctions.Include(a => a.User).Include(a => a.Bids).FirstOrDefault(a => a.Id == id);
+      
       if (auction == null)
       {
           return null;
       }
 
-      var auctionDto = new AuctionDto
+      var auctionDto = new FullAuctionDto
       {
-          Id = auction.Id,
-          Title = auction.Title,
-          Description = auction.Description,
-          StartingPrice = auction.Starting_price,
-          CurrentPrice = auction.Current_price,
-          ImageUrl = auction.Image_url,
-          EndDate = auction.End_date,
+        Id = auction.Id,
+        Title = auction.Title,
+        Description = auction.Description,
+        StartingPrice = auction.Starting_price,
+        CurrentPrice = auction.Current_price,
+        ImageUrl = auction.Image_url,
+        EndDate = auction.End_date,
+        User = new UserDto
+        {
+          Id = auction.User.Id,
+          UserName = auction.User.UserName,
+          Email = auction.User.Email,
+        },
       };
       
       return auctionDto;

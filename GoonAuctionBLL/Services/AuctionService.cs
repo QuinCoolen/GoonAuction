@@ -14,7 +14,7 @@ namespace GoonAuctionBLL.Services {
       return _auctionRepository.GetAuctions();
     }
 
-    public AuctionDto GetAuction(int id) {
+    public FullAuctionDto GetAuction(int id) {
       return _auctionRepository.GetAuction(id);
     }
 

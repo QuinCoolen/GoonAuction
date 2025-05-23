@@ -46,16 +46,16 @@ namespace GoonAuctionAPI.Controllers
 
         // GET: api/Auctions/5
         [HttpGet("{id}")]
-        public AuctionViewModel GetAuction(int id)
+        public FullAuctionViewModel GetAuction(int id)
         {
-            AuctionDto auction = _auctionService.GetAuction(id);
+            FullAuctionDto auction = _auctionService.GetAuction(id);
 
             if (auction == null)
             {
                 return null;
             }
 
-            var auctionViewModel = new AuctionViewModel
+            var auctionViewModel = new FullAuctionViewModel
             {
                 Id = auction.Id,
                 Title = auction.Title,
@@ -64,6 +64,12 @@ namespace GoonAuctionAPI.Controllers
                 CurrentPrice = auction.CurrentPrice,
                 ImageUrl = auction.ImageUrl,
                 EndDate = auction.EndDate,
+                User = new UserViewModel
+                {
+                    Id = auction.User.Id,
+                    UserName = auction.User.UserName,
+                    Email = auction.User.Email,
+                },
             };
 
             return auctionViewModel;
