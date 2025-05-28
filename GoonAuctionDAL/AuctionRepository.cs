@@ -63,6 +63,7 @@ namespace GoonAuctionDAL
           Title = createEditAuctionDto.Title,
           Description = createEditAuctionDto.Description,
           Starting_price = createEditAuctionDto.StartingPrice,
+          Current_price = createEditAuctionDto.CurrentPrice,
           Image_url = createEditAuctionDto.ImageUrl,
           End_date = createEditAuctionDto.EndDate,
           UserId = createEditAuctionDto.UserId,
@@ -95,6 +96,7 @@ namespace GoonAuctionDAL
       auction.Title = createEditAuctionDto.Title;
       auction.Description = createEditAuctionDto.Description;
       auction.Starting_price = createEditAuctionDto.StartingPrice;
+      auction.Current_price = createEditAuctionDto.CurrentPrice;
       auction.Image_url = createEditAuctionDto.ImageUrl;
       auction.End_date = createEditAuctionDto.EndDate;
 
@@ -106,6 +108,7 @@ namespace GoonAuctionDAL
           Title = auction.Title,
           Description = auction.Description,
           StartingPrice = auction.Starting_price,
+          CurrentPrice = auction.Current_price,
           ImageUrl = auction.Image_url,
           EndDate = auction.End_date,
       };

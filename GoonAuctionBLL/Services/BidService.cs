@@ -1,15 +1,18 @@
 namespace GoonAuctionBLL.Services
 {
-    using System.Collections.Generic;
+  using System;
+  using System.Collections.Generic;
     using GoonAuctionBLL.Dto;
     using GoonAuctionBLL.Interfaces;
 
     public class BidService
     {
         private readonly IBidRepository _bidRepository;
+        private readonly AuctionService _auctionService;
 
-        public BidService(IBidRepository bidRepository)
+        public BidService(IBidRepository bidRepository, AuctionService auctionService)
         {
+            _auctionService = auctionService;
             _bidRepository = bidRepository;
         }
 
@@ -25,7 +28,19 @@ namespace GoonAuctionBLL.Services
 
         public bool PlaceBid(BidDto bidDto)
         {
-          
+          var auction = _auctionService.GetAuction(bidDto.AuctionId);
+          if (auction == null || auction.EndDate < DateTime.UtcNow)
+          {
+              return false;
+          }
+
+          if (bidDto.Amount <= auction.CurrentPrice)
+          {
+              return false;
+          }
+
+          _auctionService.UpdateCurrentPrice(bidDto.AuctionId, bidDto.Amount);
+
           return _bidRepository.PlaceBid(bidDto);
         }
     }

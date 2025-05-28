@@ -26,7 +26,39 @@ namespace GoonAuctionBLL.Services {
       return _auctionRepository.UpdateAuction(id, createEditAuctionDto);
     }
 
-    public bool DeleteAuction(int id) {
+    public bool UpdateCurrentPrice(int id, int currentPrice)
+    {
+      var auction = _auctionRepository.GetAuction(id);
+      if (auction == null)
+      {
+        return false;
+      }
+      if (currentPrice <= auction.CurrentPrice)
+      {
+        return false;
+      }
+      
+      AuctionDto updatedAuction = _auctionRepository.UpdateAuction(id, new CreateEditAuctionDto
+      {
+        Title = auction.Title,
+        Description = auction.Description,
+        StartingPrice = auction.StartingPrice,
+        CurrentPrice = currentPrice,
+        ImageUrl = auction.ImageUrl,
+        EndDate = auction.EndDate,
+        UserId = auction.User.Id
+      });
+
+      if (updatedAuction == null)
+      {
+        return false;
+      }
+      
+      return true;
+    }
+
+    public bool DeleteAuction(int id)
+    {
       return _auctionRepository.DeleteAuction(id);
     }
   }
