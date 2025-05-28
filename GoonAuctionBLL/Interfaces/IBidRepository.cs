@@ -7,6 +7,6 @@ namespace GoonAuctionBLL.Interfaces
   {
     List<BidDto> GetBidsByUserId(string userId);
     List<BidDto> GetBidsByAuctionId(int auctionId);
-    void PlaceBid(BidDto bidDto);
+    bool PlaceBid(BidDto bidDto);
   }
 }

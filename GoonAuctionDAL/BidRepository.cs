@@ -45,7 +45,7 @@ namespace GoonAuctionDAL
             }).ToList();
         }
 
-        public void PlaceBid(BidDto bidDto)
+        public bool PlaceBid(BidDto bidDto)
         {
             var bid = new Bid
             {
@@ -56,6 +56,7 @@ namespace GoonAuctionDAL
 
             _context.Bids.Add(bid);
             _context.SaveChanges();
+            return true;
         }
     }
 }
