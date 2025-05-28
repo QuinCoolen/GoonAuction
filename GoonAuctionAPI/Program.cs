@@ -1,4 +1,5 @@
 using System.Text;
+using GoonAuctionAPI.Hubs;
 using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using GoonAuctionDAL;
@@ -20,6 +21,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DbContext>()
     .AddDefaultTokenProviders();
@@ -29,6 +32,8 @@ builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<BidService>();
+builder.Services.AddScoped<IBidRepository, BidRepository>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -113,6 +118,10 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapHub<BidHub>("/hub");
 
 app.Run();
