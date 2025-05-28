@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -9,10 +10,38 @@ namespace GoonAuctionAPI.Hubs
   public class BidHub : Hub
   {
     private readonly BidService _bidService;
+    private readonly UserService _userService;
 
-    public BidHub(BidService bidService)
+    public BidHub(BidService bidService, UserService userService)
     {
       _bidService = bidService;
+      _userService = userService;
+    }
+
+    public async Task JoinBid(int auctionId)
+    {
+      Claim? userId = Context.User.FindFirst(ClaimTypes.NameIdentifier);
+
+      if (userId == null)
+      {
+        throw new HubException("User not authenticated.");
+      }
+
+      var user = _userService.GetUser(userId.Value);
+
+      if (user == null)
+      {
+        throw new HubException("User not found.");
+      }
+
+      await Groups.AddToGroupAsync(Context.ConnectionId, $"Auction_{auctionId}");
+      await Clients.Group($"Auction_{auctionId}").SendAsync("UserJoined", user.UserName);
+    }
+
+    public async Task LeaveBid(int auctionId)
+    {
+      await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"Auction_{auctionId}");
+      await Clients.Group($"Auction_{auctionId}").SendAsync("UserLeft", Context.User.Identity?.Name);
     }
 
     public async Task PlaceBid(string userId, int auctionId, int amount)

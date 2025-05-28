@@ -25,7 +25,8 @@ namespace GoonAuctionBLL.Services
 
         public bool PlaceBid(BidDto bidDto)
         {
-            return _bidRepository.PlaceBid(bidDto);
+          
+          return _bidRepository.PlaceBid(bidDto);
         }
     }
 }

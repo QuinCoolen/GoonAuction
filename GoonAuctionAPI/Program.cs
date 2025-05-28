@@ -94,10 +94,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // your frontend URL
+        policy.WithOrigins("http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials(); // crucial for cookies
+              .AllowCredentials()
+              .SetIsOriginAllowed(origin => true); // This is needed for SignalR negotiation
     });
 });
 
