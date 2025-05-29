@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoonAuctionAPI.Models;
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
@@ -68,6 +69,20 @@ namespace GoonAuctionAPI.Controllers
                     UserName = auction.User.UserName,
                     Email = auction.User.Email,
                 },
+                Bids = auction.Bids.Select(bid => new BidViewModel
+                {
+                    Id = bid.Id,
+                    Amount = bid.Amount,
+                    UserId = bid.UserId,
+                    AuctionId = bid.AuctionId,
+                    BidTime = bid.Time,
+                    User = new UserViewModel
+                    {
+                        Id = bid.User.Id,
+                        UserName = bid.User.UserName,
+                        Email = bid.User.Email,
+                    }
+                }).ToList()
             };
 
             return auctionViewModel;

@@ -1,5 +1,6 @@
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
+using GoonAuctionBLL.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoonAuctionDAL
@@ -52,21 +53,36 @@ namespace GoonAuctionDAL
           UserName = auction.User.UserName,
           Email = auction.User.Email,
         },
+        Bids = auction.Bids.Select(bid => new BidDto
+        {
+          Id = bid.Id,
+          Amount = bid.Amount,
+          UserId = bid.UserId,
+          AuctionId = bid.AuctionId,
+          Time = bid.Time,
+          User = new UserDto
+          {
+            Id = bid.User.Id,
+            UserName = bid.User.UserName,
+            Email = bid.User.Email,
+          }
+        }).ToList()
       };
       
       return auctionDto;
     }
+    
     public AuctionDto CreateAuction(CreateEditAuctionDto createEditAuctionDto)
     {
       var auction = new Auction
       {
-          Title = createEditAuctionDto.Title,
-          Description = createEditAuctionDto.Description,
-          Starting_price = createEditAuctionDto.StartingPrice,
-          Current_price = createEditAuctionDto.CurrentPrice,
-          Image_url = createEditAuctionDto.ImageUrl,
-          End_date = createEditAuctionDto.EndDate,
-          UserId = createEditAuctionDto.UserId,
+        Title = createEditAuctionDto.Title,
+        Description = createEditAuctionDto.Description,
+        Starting_price = createEditAuctionDto.StartingPrice,
+        Current_price = createEditAuctionDto.CurrentPrice,
+        Image_url = createEditAuctionDto.ImageUrl,
+        End_date = createEditAuctionDto.EndDate,
+        UserId = createEditAuctionDto.UserId,
       };
 
       _context.Auctions.Add(auction);
@@ -75,12 +91,12 @@ namespace GoonAuctionDAL
 
       return new AuctionDto
       {
-          Id = auction.Id,
-          Title = auction.Title,
-          Description = auction.Description,
-          StartingPrice = auction.Starting_price,
-          ImageUrl = auction.Image_url,
-          EndDate = auction.End_date,
+        Id = auction.Id,
+        Title = auction.Title,
+        Description = auction.Description,
+        StartingPrice = auction.Starting_price,
+        ImageUrl = auction.Image_url,
+        EndDate = auction.End_date,
       };
     }
 

@@ -129,7 +129,7 @@ namespace GoonAuctionDAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Auctions");
+                    b.ToTable("Auctions", (string)null);
                 });
 
             modelBuilder.Entity("Bid", b =>
@@ -159,7 +159,7 @@ namespace GoonAuctionDAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bids");
+                    b.ToTable("Bids", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

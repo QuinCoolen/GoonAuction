@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GoonAuctionBLL.Dto {
@@ -23,8 +24,8 @@ namespace GoonAuctionBLL.Dto {
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
     [Range(typeof(DateTime), "1/1/2025", "12/31/2026", ErrorMessage = "End date must be between 1/1/2025 and 12/31/2026.")]
     public DateTime EndDate { get; set; }
-
     public UserDto User { get; set; }
+    public List<BidDto> Bids { get; set; } = new List<BidDto>();
     
   }
 }
