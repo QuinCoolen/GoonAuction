@@ -14,7 +14,9 @@ namespace GoonAuctionDAL
     }
     public List<AuctionDto> GetAuctions() 
     {
-      var auctions =  _context.Auctions.ToList();
+      var auctions =  _context.Auctions
+        .Include(a => a.User)
+        .ToList();
 
       List<AuctionDto> auctionDtos = auctions.Select(auction => new AuctionDto
       {
@@ -24,6 +26,12 @@ namespace GoonAuctionDAL
           StartingPrice = auction.Starting_price,
           CurrentPrice = auction.Current_price,
           ImageUrl = auction.Image_url,
+          User = new UserDto
+          {
+            Id = auction.User.Id,
+            UserName = auction.User.UserName,
+            Email = auction.User.Email,
+          },
           EndDate = auction.End_date,
       }).ToList();
 

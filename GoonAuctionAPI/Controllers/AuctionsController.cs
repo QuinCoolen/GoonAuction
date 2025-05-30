@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using GoonAuctionAPI.Models;
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +40,12 @@ namespace GoonAuctionAPI.Controllers
                 CurrentPrice = auction.CurrentPrice,
                 ImageUrl = auction.ImageUrl,
                 EndDate = auction.EndDate,
+                User = new UserViewModel
+                {
+                    Id = auction.User.Id,
+                    UserName = auction.User.UserName,
+                    Email = auction.User.Email,
+                }
             }).ToList();
 
             return auctionViewModels;
@@ -86,6 +94,38 @@ namespace GoonAuctionAPI.Controllers
             };
 
             return auctionViewModel;
+        }
+
+        [Authorize]
+        [HttpGet("user")]
+        public List<AuctionViewModel> GetAuctionByUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return null;
+            }
+
+            List<AuctionDto> auctions = _auctionService.GetAuctionsByUserId(userId);
+
+            List<AuctionViewModel> auctionViewModels = auctions.Select(auction => new AuctionViewModel
+            {
+                Id = auction.Id,
+                Title = auction.Title,
+                Description = auction.Description,
+                StartingPrice = auction.StartingPrice,
+                CurrentPrice = auction.CurrentPrice,
+                ImageUrl = auction.ImageUrl,
+                User = new UserViewModel
+                {
+                    Id = auction.User.Id,
+                    UserName = auction.User.UserName,
+                    Email = auction.User.Email,
+                },
+                EndDate = auction.EndDate,
+            }).ToList();
+
+            return auctionViewModels;
         }
 
         // PUT: api/Auctions/5

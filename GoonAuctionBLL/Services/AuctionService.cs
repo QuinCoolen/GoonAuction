@@ -1,13 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
 
 namespace GoonAuctionBLL.Services {
   public class AuctionService {
     private readonly IAuctionRepository _auctionRepository;
+    private readonly IBidRepository _bidRepository;
 
-    public AuctionService(IAuctionRepository auctionRepository) {
+    public AuctionService(IAuctionRepository auctionRepository, IBidRepository bidRepository)
+    {
       _auctionRepository = auctionRepository;
+      _bidRepository = bidRepository;
     }
 
     public List<AuctionDto> GetAuctions() {
@@ -18,7 +22,17 @@ namespace GoonAuctionBLL.Services {
       return _auctionRepository.GetAuction(id);
     }
 
-    public AuctionDto CreateAuction(CreateEditAuctionDto createEditAuctionDto) {
+    public List<AuctionDto> GetAuctionsByUserId(string userId)
+    {
+      List<BidDto> bids = _bidRepository.GetBidsByUserId(userId);
+      var auctionIds = new HashSet<int>(bids.Select(b => b.AuctionId));
+
+      List<AuctionDto> auctions = _auctionRepository.GetAuctions();
+      return auctions.Where(a => auctionIds.Contains(a.Id)).ToList();
+    }
+
+    public AuctionDto CreateAuction(CreateEditAuctionDto createEditAuctionDto)
+    {
       return _auctionRepository.CreateAuction(createEditAuctionDto);
     }
 

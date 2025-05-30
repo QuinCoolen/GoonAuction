@@ -20,7 +20,7 @@ namespace GoonAuctionBLL.Dto {
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
     [Range(typeof(DateTime), "1/1/2025", "12/31/2026", ErrorMessage = "End date must be between 1/1/2025 and 12/31/2026.")]
-    
+    public UserDto User { get; set; }
     public DateTime EndDate { get; set; }
   }
 }
