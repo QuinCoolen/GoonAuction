@@ -58,6 +58,8 @@ namespace GoonAuctionBLL.Services {
         Description = auction.Description,
         StartingPrice = auction.StartingPrice,
         CurrentPrice = currentPrice,
+        Increment = auction.Increment,
+        Status = auction.Status,
         ImageUrl = auction.ImageUrl,
         EndDate = auction.EndDate,
         UserId = auction.User.Id
@@ -68,6 +70,35 @@ namespace GoonAuctionBLL.Services {
         return false;
       }
       
+      return true;
+    }
+
+    public bool UpdateAuctionStatus(int id, string status)
+    {
+      var auction = _auctionRepository.GetAuction(id);
+      if (auction == null)
+      {
+        return false;
+      }
+
+      AuctionDto updatedAuction = _auctionRepository.UpdateAuction(id, new CreateEditAuctionDto
+      {
+        Title = auction.Title,
+        Description = auction.Description,
+        StartingPrice = auction.StartingPrice,
+        CurrentPrice = auction.CurrentPrice,
+        Increment = auction.Increment,
+        Status = status,
+        ImageUrl = auction.ImageUrl,
+        EndDate = auction.EndDate,
+        UserId = auction.User.Id
+      });
+
+      if (updatedAuction == null)
+      {
+        return false;
+      }
+
       return true;
     }
 

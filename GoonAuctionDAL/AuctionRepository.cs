@@ -25,6 +25,8 @@ namespace GoonAuctionDAL
           Description = auction.Description,
           StartingPrice = auction.Starting_price,
           CurrentPrice = auction.Current_price,
+          Increment = auction.Increment,
+          Status = auction.Status.ToString(),
           ImageUrl = auction.Image_url,
           User = new UserDto
           {
@@ -53,6 +55,8 @@ namespace GoonAuctionDAL
         Description = auction.Description,
         StartingPrice = auction.Starting_price,
         CurrentPrice = auction.Current_price,
+        Increment = auction.Increment,
+        Status = auction.Status.ToString(),
         ImageUrl = auction.Image_url,
         EndDate = auction.End_date,
         User = new UserDto
@@ -88,6 +92,8 @@ namespace GoonAuctionDAL
         Description = createEditAuctionDto.Description,
         Starting_price = createEditAuctionDto.StartingPrice,
         Current_price = createEditAuctionDto.CurrentPrice,
+        Increment = createEditAuctionDto.Increment,
+        Status = AuctionStatus.NotFinished,
         Image_url = createEditAuctionDto.ImageUrl,
         End_date = createEditAuctionDto.EndDate,
         UserId = createEditAuctionDto.UserId,
@@ -121,6 +127,15 @@ namespace GoonAuctionDAL
       auction.Description = createEditAuctionDto.Description;
       auction.Starting_price = createEditAuctionDto.StartingPrice;
       auction.Current_price = createEditAuctionDto.CurrentPrice;
+      auction.Increment = createEditAuctionDto.Increment;
+      auction.Status = createEditAuctionDto.Status switch
+      {
+          "NotFinished" => AuctionStatus.NotFinished,
+          "Unpaid" => AuctionStatus.Unpaid,
+          "PaymentPending" => AuctionStatus.PaymentPending,
+          "Paid" => AuctionStatus.Paid,
+          _ => auction.Status
+      };
       auction.Image_url = createEditAuctionDto.ImageUrl;
       auction.End_date = createEditAuctionDto.EndDate;
 

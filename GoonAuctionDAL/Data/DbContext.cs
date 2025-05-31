@@ -16,6 +16,10 @@ public class DbContext(DbContextOptions<DbContext> options) : IdentityDbContext<
       .HasForeignKey(a => a.UserId)
       .OnDelete(DeleteBehavior.Cascade);
 
+    modelBuilder.Entity<Auction>()
+      .Property(a => a.Status)
+      .HasConversion<string>();
+
     modelBuilder.Entity<Bid>()
         .HasOne(b => b.User)
         .WithMany(u => u.Bids)

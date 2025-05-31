@@ -38,6 +38,8 @@ namespace GoonAuctionAPI.Controllers
                 Description = auction.Description,
                 StartingPrice = auction.StartingPrice,
                 CurrentPrice = auction.CurrentPrice,
+                Increment = auction.Increment,
+                Status = auction.Status,
                 ImageUrl = auction.ImageUrl,
                 EndDate = auction.EndDate,
                 User = new UserViewModel
@@ -69,6 +71,8 @@ namespace GoonAuctionAPI.Controllers
                 Description = auction.Description,
                 StartingPrice = auction.StartingPrice,
                 CurrentPrice = auction.CurrentPrice,
+                Increment = auction.Increment,
+                Status = auction.Status,
                 ImageUrl = auction.ImageUrl,
                 EndDate = auction.EndDate,
                 User = new UserViewModel
@@ -115,6 +119,8 @@ namespace GoonAuctionAPI.Controllers
                 Description = auction.Description,
                 StartingPrice = auction.StartingPrice,
                 CurrentPrice = auction.CurrentPrice,
+                Increment = auction.Increment,
+                Status = auction.Status,
                 ImageUrl = auction.ImageUrl,
                 User = new UserViewModel
                 {
@@ -126,6 +132,29 @@ namespace GoonAuctionAPI.Controllers
             }).ToList();
 
             return auctionViewModels;
+        }
+
+        [HttpPatch("{id}/status")]
+        public IActionResult UpdateAuctionStatus(int id, string status)
+        {
+            if (string.IsNullOrEmpty(status))
+            {
+                return BadRequest("Status cannot be null or empty.");
+            }
+
+            var auction = _auctionService.GetAuction(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
+
+
+            if (!_auctionService.UpdateAuctionStatus(id, status))
+            {
+                return BadRequest("Failed to update auction status.");
+            }
+
+            return NoContent();
         }
 
         // PUT: api/Auctions/5
