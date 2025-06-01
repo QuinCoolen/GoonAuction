@@ -45,7 +45,7 @@ namespace GoonAuctionAPI.Controllers
                 User = new UserViewModel
                 {
                     Id = auction.User.Id,
-                    UserName = auction.User.UserName,
+                    Username = auction.User.UserName,
                     Email = auction.User.Email,
                 }
             }).ToList();
@@ -78,7 +78,7 @@ namespace GoonAuctionAPI.Controllers
                 User = new UserViewModel
                 {
                     Id = auction.User.Id,
-                    UserName = auction.User.UserName,
+                    Username = auction.User.UserName,
                     Email = auction.User.Email,
                 },
                 Bids = auction.Bids.Select(bid => new BidViewModel
@@ -91,7 +91,7 @@ namespace GoonAuctionAPI.Controllers
                     User = new UserViewModel
                     {
                         Id = bid.User.Id,
-                        UserName = bid.User.UserName,
+                        Username = bid.User.UserName,
                         Email = bid.User.Email,
                     }
                 }).ToList()
@@ -125,7 +125,7 @@ namespace GoonAuctionAPI.Controllers
                 User = new UserViewModel
                 {
                     Id = auction.User.Id,
-                    UserName = auction.User.UserName,
+                    Username = auction.User.UserName,
                     Email = auction.User.Email,
                 },
                 EndDate = auction.EndDate,
