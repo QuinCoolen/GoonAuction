@@ -64,6 +64,12 @@ namespace GoonAuctionAPI.Controllers
                 return null;
             }
 
+            if (auction.Status == AuctionStatus.NotFinished.ToString() && auction.EndDate <= DateTime.UtcNow)
+            {
+                auction.Status = auction.Bids.Any() ? AuctionStatus.Unpaid.ToString() : AuctionStatus.Paid.ToString();
+                _auctionService.UpdateAuctionStatus(id, auction.Status);
+            }
+
             var auctionViewModel = new FullAuctionViewModel
             {
                 Id = auction.Id,

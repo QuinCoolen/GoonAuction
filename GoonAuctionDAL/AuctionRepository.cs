@@ -91,7 +91,7 @@ namespace GoonAuctionDAL
         Title = createEditAuctionDto.Title,
         Description = createEditAuctionDto.Description,
         Starting_price = createEditAuctionDto.StartingPrice,
-        Current_price = createEditAuctionDto.CurrentPrice,
+        Current_price = createEditAuctionDto.StartingPrice,
         Increment = createEditAuctionDto.Increment,
         Status = AuctionStatus.NotFinished,
         Image_url = createEditAuctionDto.ImageUrl,
