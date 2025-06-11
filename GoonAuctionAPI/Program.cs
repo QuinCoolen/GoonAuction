@@ -57,30 +57,22 @@ builder.Services.AddAuthentication(options =>
     {
         OnAuthenticationFailed = context =>
         {
-            Console.WriteLine("Authentication failed: " + context.Exception.Message);
-            Console.WriteLine("Exception type: " + context.Exception.GetType().Name);
             if (context.Exception is SecurityTokenExpiredException)
             {
-                Console.WriteLine("Token is expired");
+                context.Response.Headers.Add("Token-Expired", "true");
             }
             return Task.CompletedTask;
         },
         OnTokenValidated = context =>
         {
-            Console.WriteLine("Token validated successfully");
-            Console.WriteLine("Token claims: " + string.Join(", ", context.Principal.Claims.Select(c => $"{c.Type}: {c.Value}")));
             return Task.CompletedTask;
         },
         OnChallenge = context =>
         {
-            Console.WriteLine("Challenge issued: " + context.Error);
-            Console.WriteLine("Challenge error description: " + context.ErrorDescription);
-            Console.WriteLine("Challenge error uri: " + context.ErrorUri);
             return Task.CompletedTask;
         },
         OnMessageReceived = context =>
         {
-            Console.WriteLine("Message received. Token: " + (context.Request.Cookies["jwt"] ?? "No token found"));
             if (context.Request.Cookies.ContainsKey("jwt"))
             {
                 context.Token = context.Request.Cookies["jwt"];

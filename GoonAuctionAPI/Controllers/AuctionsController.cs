@@ -70,12 +70,7 @@ namespace GoonAuctionAPI.Controllers
                 auction.Status = auction.Bids.Any() ? AuctionStatus.Unpaid.ToString() : AuctionStatus.Paid.ToString();
                 _auctionService.UpdateAuctionStatus(id, auction.Status);
             }
-
-            foreach (var bid in auction.Bids)
-            {
-                Console.WriteLine($"Bid Controller Time: {bid.Time}");
-            }
-
+            
             var auctionViewModel = new FullAuctionViewModel
             {
                 Id = auction.Id,
