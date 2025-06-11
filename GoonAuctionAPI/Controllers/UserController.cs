@@ -45,7 +45,7 @@ namespace GoonAuctionAPI.Controllers
             return Ok(new
             {
                 id = user.Id,
-                username = user.UserName,
+                username = user.Username,
                 email = user.Email
             });
         }

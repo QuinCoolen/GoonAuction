@@ -17,7 +17,7 @@ namespace GoonAuctionDAL
       return _context.Users.Select(u => new UserDto
       {
         Id = u.Id,
-        UserName = u.UserName,
+        Username = u.UserName,
         Email = u.Email,
       }).ToList();
     }
@@ -33,7 +33,7 @@ namespace GoonAuctionDAL
       return new UserDto
       {
         Id = user.Id,
-        UserName = user.UserName,
+        Username = user.UserName,
         Email = user.Email,
       };
     }
@@ -50,7 +50,7 @@ namespace GoonAuctionDAL
       return new UserDto
       {
         Id = user.Id,
-        UserName = user.UserName,
+        Username = user.UserName,
         Email = user.Email,
       };
     }

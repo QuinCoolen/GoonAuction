@@ -31,7 +31,7 @@ namespace GoonAuctionDAL
           User = new UserDto
           {
             Id = auction.User.Id,
-            UserName = auction.User.UserName,
+            Username = auction.User.UserName,
             Email = auction.User.Email,
           },
           EndDate = auction.End_date,
@@ -41,7 +41,7 @@ namespace GoonAuctionDAL
     }
     public FullAuctionDto GetAuction(int id)
     {
-      Auction? auction =  _context.Auctions.Include(a => a.User).Include(a => a.Bids).FirstOrDefault(a => a.Id == id);
+      Auction? auction =  _context.Auctions.Include(a => a.User).Include(a => a.Bids).ThenInclude(b => b.User).FirstOrDefault(a => a.Id == id);
       
       if (auction == null)
       {
@@ -62,7 +62,7 @@ namespace GoonAuctionDAL
         User = new UserDto
         {
           Id = auction.User.Id,
-          UserName = auction.User.UserName,
+          Username = auction.User.UserName,
           Email = auction.User.Email,
         },
         Bids = auction.Bids.Select(bid => new BidDto
@@ -75,7 +75,7 @@ namespace GoonAuctionDAL
           User = new UserDto
           {
             Id = bid.User.Id,
-            UserName = bid.User.UserName,
+            Username = bid.User.UserName,
             Email = bid.User.Email,
           }
         }).ToList()

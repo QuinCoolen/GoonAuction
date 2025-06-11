@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace GoonAuctionAPI.Controllers
 {
@@ -45,7 +46,7 @@ namespace GoonAuctionAPI.Controllers
                 User = new UserViewModel
                 {
                     Id = auction.User.Id,
-                    Username = auction.User.UserName,
+                    Username = auction.User.Username,
                     Email = auction.User.Email,
                 }
             }).ToList();
@@ -70,6 +71,11 @@ namespace GoonAuctionAPI.Controllers
                 _auctionService.UpdateAuctionStatus(id, auction.Status);
             }
 
+            foreach (var bid in auction.Bids)
+            {
+                Console.WriteLine($"Bid Controller Time: {bid.Time}");
+            }
+
             var auctionViewModel = new FullAuctionViewModel
             {
                 Id = auction.Id,
@@ -84,7 +90,7 @@ namespace GoonAuctionAPI.Controllers
                 User = new UserViewModel
                 {
                     Id = auction.User.Id,
-                    Username = auction.User.UserName,
+                    Username = auction.User.Username,
                     Email = auction.User.Email,
                 },
                 Bids = auction.Bids.Select(bid => new BidViewModel
@@ -93,11 +99,11 @@ namespace GoonAuctionAPI.Controllers
                     Amount = bid.Amount,
                     UserId = bid.UserId,
                     AuctionId = bid.AuctionId,
-                    BidTime = bid.Time,
+                    Time = bid.Time,
                     User = new UserViewModel
                     {
                         Id = bid.User.Id,
-                        Username = bid.User.UserName,
+                        Username = bid.User.Username,
                         Email = bid.User.Email,
                     }
                 }).ToList()
@@ -131,7 +137,7 @@ namespace GoonAuctionAPI.Controllers
                 User = new UserViewModel
                 {
                     Id = auction.User.Id,
-                    Username = auction.User.UserName,
+                    Username = auction.User.Username,
                     Email = auction.User.Email,
                 },
                 EndDate = auction.EndDate,

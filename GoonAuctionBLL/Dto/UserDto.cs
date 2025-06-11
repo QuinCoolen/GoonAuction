@@ -7,7 +7,7 @@ namespace GoonAuctionBLL.Dto
     public string Id { get; set; }
     [Required(ErrorMessage = "User name is required.")]
     [StringLength(50, ErrorMessage = "User name cannot be longer than 50 characters.")]
-    public string UserName { get; set; }
+    public string Username { get; set; }
     [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Invalid email address.")]
     [StringLength(100, ErrorMessage = "Email cannot be longer than 100 characters.")]

@@ -53,7 +53,7 @@ namespace GoonAuctionBLL.Services
       EditUserDto EditUserDto = new EditUserDto
       {
           Email = user.Email,
-          UserName = user.UserName,
+          UserName = user.Username,
           RefreshToken = refreshToken,
           RefreshTokenExpiryTime = expiry
       };
@@ -70,7 +70,7 @@ namespace GoonAuctionBLL.Services
       EditUserDto EditUserDto = new EditUserDto
       {
           Email = user.Email,
-          UserName = user.UserName,
+          UserName = user.Username,
           RefreshToken = refreshToken,
           RefreshTokenExpiryTime = expiry
       };

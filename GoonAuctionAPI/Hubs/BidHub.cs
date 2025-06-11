@@ -35,7 +35,7 @@ namespace GoonAuctionAPI.Hubs
       }
 
       await Groups.AddToGroupAsync(Context.ConnectionId, $"Auction_{auctionId}");
-      await Clients.Group($"Auction_{auctionId}").SendAsync("UserJoined", user.UserName);
+      await Clients.Group($"Auction_{auctionId}").SendAsync("UserJoined", user.Username);
     }
 
     public async Task LeaveBid(int auctionId)
@@ -46,11 +46,25 @@ namespace GoonAuctionAPI.Hubs
 
     public async Task PlaceBid(string userId, int auctionId, int amount)
     {
+      if (string.IsNullOrEmpty(userId) || auctionId <= 0 || amount <= 0)
+      {
+        throw new HubException("Invalid bid parameters.");
+      }
+
+      UserDto? user = _userService.GetUser(userId); 
+
+      if (user == null)
+      {
+        throw new HubException("User not found.");
+      }
+
       var bidDto = new BidDto
       {
         UserId = userId,
         AuctionId = auctionId,
-        Amount = amount
+        Amount = amount,
+        Time = DateTime.UtcNow,
+        User = user
       };
 
       bool isBidPlaced = _bidService.PlaceBid(bidDto);
