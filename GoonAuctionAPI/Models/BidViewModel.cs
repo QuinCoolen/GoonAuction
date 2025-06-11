@@ -6,7 +6,7 @@ namespace GoonAuctionAPI.Models
         public string UserId { get; set; }
         public int AuctionId { get; set; }
         public int Amount { get; set; }
-        public DateTimeOffset Time { get; set; }
+        public DateTime Time { get; set; }
         public UserViewModel User { get; set; }
     }
 }

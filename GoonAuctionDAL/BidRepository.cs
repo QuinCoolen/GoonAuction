@@ -52,7 +52,7 @@ namespace GoonAuctionDAL
                 Amount = bidDto.Amount,
                 UserId = bidDto.UserId,
                 AuctionId = bidDto.AuctionId,
-                Time = bidDto.Time.UtcDateTime,
+                Time = bidDto.Time,
             };
 
             _context.Bids.Add(bid);

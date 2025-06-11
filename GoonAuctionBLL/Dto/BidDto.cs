@@ -8,7 +8,7 @@ namespace GoonAuctionBLL.Dto
         public string UserId { get; set; }
         public int AuctionId { get; set; }
         public int Amount { get; set; }
-        public DateTimeOffset Time { get; set; }
+        public DateTime Time { get; set; }
         public UserDto User { get; set; }
     }
 }

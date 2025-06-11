@@ -44,7 +44,7 @@ namespace GoonAuctionAPI.Hubs
       await Clients.Group($"Auction_{auctionId}").SendAsync("UserLeft", Context.User.Identity?.Name);
     }
 
-    public async Task PlaceBid(string userId, int auctionId, int amount)
+    public async Task PlaceBid(string userId, int auctionId, int amount, string time)
     {
       if (string.IsNullOrEmpty(userId) || auctionId <= 0 || amount <= 0)
       {
@@ -63,7 +63,7 @@ namespace GoonAuctionAPI.Hubs
         UserId = userId,
         AuctionId = auctionId,
         Amount = amount,
-        Time = DateTime.UtcNow,
+        Time = time != null ? DateTime.Parse(time) : DateTime.UtcNow,
         User = user
       };
 
