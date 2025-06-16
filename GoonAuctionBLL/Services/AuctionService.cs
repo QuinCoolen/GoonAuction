@@ -4,7 +4,7 @@ using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Interfaces;
 
 namespace GoonAuctionBLL.Services {
-  public class AuctionService {
+  public class AuctionService : IAuctionService {
     private readonly IAuctionRepository _auctionRepository;
     private readonly IBidRepository _bidRepository;
 

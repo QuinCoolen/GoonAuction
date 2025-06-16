@@ -8,9 +8,9 @@ namespace GoonAuctionBLL.Services
     public class BidService
     {
         private readonly IBidRepository _bidRepository;
-        private readonly AuctionService _auctionService;
+        private readonly IAuctionService _auctionService;
 
-        public BidService(IBidRepository bidRepository, AuctionService auctionService)
+        public BidService(IBidRepository bidRepository, IAuctionService auctionService)
         {
             _auctionService = auctionService;
             _bidRepository = bidRepository;

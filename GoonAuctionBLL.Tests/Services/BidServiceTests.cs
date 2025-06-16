@@ -11,13 +11,13 @@ namespace GoonAuctionBLL.Tests.Services
     public class BidServiceTests
     {
         private readonly Mock<IBidRepository> _mockBidRepository;
-        private readonly Mock<AuctionService> _mockAuctionService;
+        private readonly Mock<IAuctionService> _mockAuctionService;
         private readonly BidService _bidService;
 
         public BidServiceTests()
         {
             _mockBidRepository = new Mock<IBidRepository>();
-            _mockAuctionService = new Mock<AuctionService>(null, null);
+            _mockAuctionService = new Mock<IAuctionService>();
             _bidService = new BidService(_mockBidRepository.Object, _mockAuctionService.Object);
         }
 

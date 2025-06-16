@@ -16,11 +16,14 @@ namespace GoonAuctionBLL.Services
 
       public AuthService(IConfiguration configuration)
       {
-          _configuration = configuration;
+          _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
       }
         
       public string GenerateJwtToken(UserDto user)
       {
+          if (user == null)
+              throw new ArgumentNullException(nameof(user));
+
           var claims = new List<Claim>
           {
               new Claim(ClaimTypes.NameIdentifier, user.Id),
