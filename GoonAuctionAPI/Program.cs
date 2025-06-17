@@ -121,3 +121,5 @@ app.UseStaticFiles();
 app.MapHub<BidHub>("/hub");
 
 app.Run();
+
+public partial class Program { }

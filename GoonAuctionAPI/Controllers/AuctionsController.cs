@@ -19,9 +19,9 @@ namespace GoonAuctionAPI.Controllers
     [ApiController]
     public class AuctionsController : ControllerBase
     {
-        private readonly AuctionService _auctionService;
+        private readonly IAuctionService _auctionService;
 
-        public AuctionsController(AuctionService auctionService)
+        public AuctionsController(IAuctionService auctionService)
         {
             _auctionService = auctionService;
         }
