@@ -46,10 +46,10 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-      - name: Debug Sonar URL
+      - name: Install Dotnet Coverage Tool
         shell: powershell
         run: |
-          echo "Sonar URL is: https://sonarcloud.io"
+          dotnet tool install --global dotnet-coverage
 
       - name: Build and analyze
         env:
@@ -61,7 +61,12 @@ jobs:
       - name: Build the solution
         shell: powershell
         run: |
-          dotnet build
+          dotnet build --no-incremental
+      
+      - name: Run tests and collect coverage
+        shell: powershell
+        run: |
+          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
 
       - name: End Scanner
         env:
