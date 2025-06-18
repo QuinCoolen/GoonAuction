@@ -166,7 +166,7 @@ namespace GoonAuctionBLL.Tests.Services
             };
 
             _mockAuctionService.Setup(service => service.GetAuction(bidDto.AuctionId))
-                .Returns((FullAuctionDto)null);
+                .Returns((FullAuctionDto)null!);
 
             // Act
             var result = _bidService.PlaceBid(bidDto);
