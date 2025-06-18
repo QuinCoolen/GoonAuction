@@ -52,10 +52,20 @@ jobs:
           echo "Sonar URL is: ${{ secrets.SONAR_HOST_URL }}"
 
       - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"goonauction" /o:"GoonAuction" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+
+      - name: Build the solution
+        shell: powershell
+        run: |
           dotnet build
+
+      - name: End Scanner
+        shell: powershell
+        run: |
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
 
