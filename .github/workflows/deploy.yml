@@ -68,7 +68,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /k:"goonauction" /o:"goonauction" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
 
   # ──────────────────────────────────────────────────────────────
