@@ -85,7 +85,7 @@ namespace GoonAuctionBLL.Tests.Services
         public void GenerateJwtToken_WithNullUser_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => _authService.GenerateJwtToken(null));
+            Assert.Throws<ArgumentNullException>(() => _authService.GenerateJwtToken(null!));
         }
 
         [Fact]

@@ -90,7 +90,7 @@ namespace GoonAuctionBLL.Tests.Services
             // Arrange
             var userId = "invalid-id";
             _mockUserRepository.Setup(repo => repo.GetUser(userId))
-                .Returns((UserDto)null);
+                .Returns((UserDto)null!);
 
             // Act & Assert
             Assert.Throws<ArgumentException>(() => 
@@ -120,7 +120,7 @@ namespace GoonAuctionBLL.Tests.Services
             // Arrange
             var email = "nonexistent@example.com";
             _mockUserRepository.Setup(repo => repo.GetUserByEmail(email))
-                .Returns((UserDto)null);
+                .Returns((UserDto)null!);
 
             // Act
             var result = _userService.GetUserByEmail(email);
@@ -213,7 +213,7 @@ namespace GoonAuctionBLL.Tests.Services
             // Arrange
             var userId = "invalid-id";
             _mockUserRepository.Setup(repo => repo.GetUser(userId))
-                .Returns((UserDto)null);
+                .Returns((UserDto)null!);
 
             // Act & Assert
             Assert.Throws<ArgumentException>(() => 
