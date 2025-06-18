@@ -62,6 +62,11 @@ jobs:
         shell: powershell
         run: |
           dotnet build --no-incremental
+
+      - name: Run tests
+        shell: powershell
+        run: |
+          dotnet test --no-build --verbosity normal
       
       - name: Run tests and collect coverage
         shell: powershell
