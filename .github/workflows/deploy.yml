@@ -64,6 +64,8 @@ jobs:
           dotnet build
 
       - name: End Scanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
