@@ -7,6 +7,8 @@ COPY GoonAuction.sln ./
 COPY GoonAuctionAPI/GoonAuctionAPI.csproj GoonAuctionAPI/
 COPY GoonAuctionBLL/GoonAuctionBLL.csproj GoonAuctionBLL/
 COPY GoonAuctionDAL/GoonAuctionDAL.csproj GoonAuctionDAL/
+COPY GoonAuctionAPI.Tests/GoonAuctionAPI.Tests.csproj GoonAuctionAPI.Tests/
+COPY GoonAuctionBLL.Tests/GoonAuctionBLL.Tests.csproj GoonAuctionBLL.Tests/
 RUN dotnet restore
 
 # Copy everything else and build
