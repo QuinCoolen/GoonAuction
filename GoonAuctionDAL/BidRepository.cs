@@ -57,6 +57,8 @@ namespace GoonAuctionDAL
 
             _context.Bids.Add(bid);
             _context.SaveChanges();
+
+            bidDto.Id = bid.Id;
             return true;
         }
     }
