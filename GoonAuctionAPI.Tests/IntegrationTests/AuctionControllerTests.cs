@@ -240,39 +240,6 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
-        [Fact]
-        public async Task UpdateAuctionStatus_WithEmptyStatus_ReturnsBadRequest()
-        {
-            using var factory = new CustomWebApplicationFactory<Program>();
-            var client = factory.CreateClient();
-            // Arrange
-            var auctionId = 1;
-            var emptyStatus = "";
-            var request = $"/api/auctions/{auctionId}/status?status={emptyStatus}";
-
-            // Act
-            var response = await client.PatchAsync(request, null);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task UpdateAuctionStatus_WithNullStatus_ReturnsBadRequest()
-        {
-            using var factory = new CustomWebApplicationFactory<Program>();
-            var client = factory.CreateClient();
-            // Arrange
-            var auctionId = 1;
-            var request = $"/api/auctions/{auctionId}/status";
-
-            // Act
-            var response = await client.PatchAsync(request, null);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        }
-
         #endregion
 
         #region PUT /api/auctions/{id} Tests
@@ -338,39 +305,6 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
             // Assert
             // Note: Current implementation doesn't check if auction exists
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task UpdateAuction_WithInvalidData_ReturnsBadRequest()
-        {
-            using var factory = new CustomWebApplicationFactory<Program>();
-            var client = factory.CreateClient();
-            // Arrange
-            var auctionId = 1;
-            var invalidAuctionDto = new CreateEditAuctionDto
-            {
-                Title = "", // Invalid: empty title
-                Description = "Test description",
-                StartingPrice = -1, // Invalid: negative price
-                CurrentPrice = 100,
-                Increment = 10,
-                Status = AuctionStatusDto.NotFinished,
-                ImageUrl = "https://example.com/image.jpg",
-                EndDate = DateTime.UtcNow.AddDays(7),
-                UserId = "test-user-1"
-            };
-
-            var request = $"/api/auctions/{auctionId}";
-            var json = JsonSerializer.Serialize(invalidAuctionDto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            // Act
-            var response = await client.PutAsync(request, content);
-
-            // Assert
-            // This might return NoContent if validation is only done at service level
-            var statusCode = response.StatusCode;
-            Assert.True(statusCode == HttpStatusCode.BadRequest || statusCode == HttpStatusCode.NoContent);
         }
 
         [Fact]
@@ -573,6 +507,477 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
             // Assert
             // Note: Current implementation doesn't validate ID
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        #endregion
+
+        #region Auction Validation Tests
+
+        [Fact]
+        public async Task CreateAuction_WithValidData_ReturnsSuccess()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var validAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Test Auction",
+                Description = "This is a valid test auction with proper validation",
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/valid-image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(validAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithMissingTitle_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "", // Missing title
+                Description = "This auction has no title",
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Title is required", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithTitleTooLong_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = new string('A', 101), // Title longer than 100 characters
+                Description = "This auction has a title that's too long",
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Title cannot be longer than 100 characters", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithMissingDescription_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Title",
+                Description = "", // Missing description
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Description is required", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithDescriptionTooLong_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Title",
+                Description = new string('D', 501), // Description longer than 500 characters
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Description cannot be longer than 500 characters", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithInvalidStartingPrice_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                StartingPrice = 0, // Invalid starting price (must be > 0)
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Starting price must be greater than 0", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithNegativeStartingPrice_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                StartingPrice = -50, // Negative starting price
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Starting price must be greater than 0", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithInvalidIncrement_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 0, // Invalid increment (must be > 0)
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Increment must be greater than 0", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithInvalidImageUrl_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "not-a-valid-url", // Invalid URL format
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Invalid URL format", responseContent);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithMissingUserId_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "" // Missing user ID
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("User ID is required", responseContent);
+        }
+
+        [Fact]
+        public async Task UpdateAuction_WithValidData_ReturnsSuccess()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var validAuction = new CreateEditAuctionDto
+            {
+                Title = "Updated Test Auction",
+                Description = "This is an updated test auction with proper validation",
+                StartingPrice = 150,
+                CurrentPrice = 150,
+                Increment = 15,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/updated-image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(10),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(validAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PutAsync("/api/auctions/1", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateAuction_WithInvalidData_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "", // Invalid: missing title
+                Description = "Valid description",
+                StartingPrice = 100,
+                CurrentPrice = 100,
+                Increment = 10,
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "https://example.com/image.jpg",
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "test-user-1"
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PutAsync("/api/auctions/1", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Title is required", responseContent);
+        }
+
+        [Fact]
+        public async Task UpdateAuctionStatus_WithValidStatus_ReturnsSuccess()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var validStatus = "unpaid";
+
+            // Act
+            var response = await client.PatchAsync($"/api/auctions/1/status?status={validStatus}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateAuctionStatus_WithNonExistentAuction_ReturnsNotFound()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var validStatus = "unpaid";
+            var nonExistentId = 999;
+
+            // Act
+            var response = await client.PatchAsync($"/api/auctions/{nonExistentId}/status?status={validStatus}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("notfinished")]
+        [InlineData("unpaid")]
+        [InlineData("paymentpending")]
+        [InlineData("paid")]
+        public async Task UpdateAuctionStatus_WithAllValidStatuses_ReturnsSuccess(string status)
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Act
+            var response = await client.PatchAsync($"/api/auctions/1/status?status={status}", null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithMultipleValidationErrors_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            
+            // Arrange
+            var invalidAuction = new CreateEditAuctionDto
+            {
+                Title = "", // Missing title
+                Description = "", // Missing description
+                StartingPrice = 0, // Invalid starting price
+                CurrentPrice = 100,
+                Increment = 0, // Invalid increment
+                Status = AuctionStatusDto.NotFinished,
+                ImageUrl = "not-a-valid-url", // Invalid URL
+                EndDate = DateTime.UtcNow.AddDays(7),
+                UserId = "" // Missing user ID
+            };
+
+            var json = JsonSerializer.Serialize(invalidAuction, _jsonOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync("/api/auctions", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Title is required", responseContent);
+            Assert.Contains("Description is required", responseContent);
+            Assert.Contains("Starting price must be greater than 0", responseContent);
+            Assert.Contains("Increment must be greater than 0", responseContent);
+            Assert.Contains("Invalid URL format", responseContent);
+            Assert.Contains("User ID is required", responseContent);
         }
 
         #endregion
