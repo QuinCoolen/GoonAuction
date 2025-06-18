@@ -65,9 +65,9 @@ namespace GoonAuctionAPI.Controllers
                 return null;
             }
 
-            if (auction.Status == AuctionStatus.NotFinished.ToString() && auction.EndDate <= DateTime.UtcNow)
+            if (auction.Status == AuctionStatusDto.NotFinished && auction.EndDate <= DateTime.UtcNow)
             {
-                auction.Status = auction.Bids.Any() ? AuctionStatus.Unpaid.ToString() : AuctionStatus.Paid.ToString();
+                auction.Status = auction.Bids.Any() ? AuctionStatusDto.Unpaid : AuctionStatusDto.Paid;
                 _auctionService.UpdateAuctionStatus(id, auction.Status);
             }
             
@@ -154,9 +154,30 @@ namespace GoonAuctionAPI.Controllers
             {
                 return NotFound();
             }
+            
+            AuctionStatusDto auctionStatus;
+
+            switch (status.ToLower())
+            {
+                case "notfinished":
+                    auctionStatus = AuctionStatusDto.NotFinished;
+                    break;
+                case "unpaid":
+                    auctionStatus = AuctionStatusDto.Unpaid;
+                    break;
+                case "paymentpending":
+                    auctionStatus = AuctionStatusDto.PaymentPending;
+                    break;
+                case "paid":
+                    auctionStatus = AuctionStatusDto.Paid;
+                    break;
+                default:
+                    auctionStatus = auction.Status;
+                    break;
+            }
 
 
-            if (!_auctionService.UpdateAuctionStatus(id, status))
+            if (!_auctionService.UpdateAuctionStatus(id, auctionStatus))
             {
                 return BadRequest("Failed to update auction status.");
             }
@@ -169,6 +190,10 @@ namespace GoonAuctionAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult PutAuction(int id, CreateEditAuctionDto auctionDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             _auctionService.UpdateAuction(id, auctionDto);
             return NoContent();
         }
@@ -178,6 +203,16 @@ namespace GoonAuctionAPI.Controllers
         [HttpPost]
         public IActionResult PostAuction(CreateEditAuctionDto auctionDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (auctionDto == null)
+            {
+                return BadRequest("Auction data cannot be null.");
+            }
+
             _auctionService.CreateAuction(auctionDto);
             return NoContent();
         }

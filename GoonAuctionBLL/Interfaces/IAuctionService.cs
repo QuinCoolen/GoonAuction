@@ -11,7 +11,7 @@ namespace GoonAuctionBLL.Interfaces
         AuctionDto CreateAuction(CreateEditAuctionDto createEditAuctionDto);
         AuctionDto UpdateAuction(int id, CreateEditAuctionDto createEditAuctionDto);
         bool UpdateCurrentPrice(int id, int currentPrice);
-        bool UpdateAuctionStatus(int id, string status);
+        bool UpdateAuctionStatus(int id, AuctionStatusDto status);
         bool DeleteAuction(int id);
     }
 } 

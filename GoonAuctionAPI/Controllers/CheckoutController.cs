@@ -25,7 +25,7 @@ public class CheckoutController : ControllerBase
       return NotFound(new { message = "Auction not found" });
     }
 
-    bool isPending = _auctionService.UpdateAuctionStatus(auctionId, "PaymentPending");
+    bool isPending = _auctionService.UpdateAuctionStatus(auctionId, AuctionStatusDto.PaymentPending);
 
     if (!isPending)
     {
@@ -74,7 +74,7 @@ public class CheckoutController : ControllerBase
     var service = new SessionService();
     Session session = service.Create(options);
 
-    bool isPaid = _auctionService.UpdateAuctionStatus(auctionId, "Paid");
+    bool isPaid = _auctionService.UpdateAuctionStatus(auctionId, AuctionStatusDto.Paid);
 
     if (!isPaid)
     {

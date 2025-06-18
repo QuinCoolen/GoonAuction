@@ -291,7 +291,7 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
                 StartingPrice = 100,
                 CurrentPrice = 100,
                 Increment = 10,
-                Status = "NotFinished",
+                Status = AuctionStatusDto.NotFinished,
                 ImageUrl = "https://example.com/image.jpg",
                 EndDate = DateTime.UtcNow.AddDays(7),
                 UserId = "test-user-1"
@@ -322,7 +322,7 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
                 StartingPrice = 100,
                 CurrentPrice = 100,
                 Increment = 10,
-                Status = "NotFinished",
+                Status = AuctionStatusDto.NotFinished,
                 ImageUrl = "https://example.com/image.jpg",
                 EndDate = DateTime.UtcNow.AddDays(7),
                 UserId = "test-user-1"
@@ -354,7 +354,7 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
                 StartingPrice = -1, // Invalid: negative price
                 CurrentPrice = 100,
                 Increment = 10,
-                Status = "NotFinished",
+                Status = AuctionStatusDto.NotFinished,
                 ImageUrl = "https://example.com/image.jpg",
                 EndDate = DateTime.UtcNow.AddDays(7),
                 UserId = "test-user-1"
@@ -407,7 +407,7 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
                 StartingPrice = 50,
                 CurrentPrice = 50,
                 Increment = 5,
-                Status = "NotFinished",
+                Status = AuctionStatusDto.NotFinished,
                 ImageUrl = "https://example.com/new-image.jpg",
                 EndDate = DateTime.UtcNow.AddDays(14),
                 UserId = "test-user-1"
@@ -437,7 +437,7 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
                 StartingPrice = 0, // Invalid: zero price
                 CurrentPrice = 50,
                 Increment = 5,
-                Status = "NotFinished",
+                Status = AuctionStatusDto.NotFinished,
                 ImageUrl = "https://example.com/image.jpg",
                 EndDate = DateTime.UtcNow.AddDays(14),
                 UserId = "test-user-1"
@@ -485,7 +485,7 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
                 StartingPrice = 50,
                 CurrentPrice = 50,
                 Increment = 5,
-                Status = "NotFinished",
+                Status = AuctionStatusDto.NotFinished,
                 ImageUrl = "https://example.com/image.jpg",
                 EndDate = DateTime.UtcNow.AddDays(-1), // Invalid: past date
                 UserId = "test-user-1"
@@ -573,26 +573,6 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
             // Assert
             // Note: Current implementation doesn't validate ID
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-        }
-
-        #endregion
-
-        #region Helper Methods
-
-        private CreateEditAuctionDto CreateValidAuctionDto()
-        {
-            return new CreateEditAuctionDto
-            {
-                Title = "Test Auction",
-                Description = "A test auction for integration testing",
-                StartingPrice = 100,
-                CurrentPrice = 100,
-                Increment = 10,
-                Status = "NotFinished",
-                ImageUrl = "https://example.com/test-image.jpg",
-                EndDate = DateTime.UtcNow.AddDays(7),
-                UserId = "test-user-1"
-            };
         }
 
         #endregion

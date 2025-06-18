@@ -73,7 +73,7 @@ namespace GoonAuctionBLL.Services {
       return true;
     }
 
-    public bool UpdateAuctionStatus(int id, string status)
+    public bool UpdateAuctionStatus(int id, AuctionStatusDto status)
     {
       var auction = _auctionRepository.GetAuction(id);
       if (auction == null)
@@ -88,7 +88,7 @@ namespace GoonAuctionBLL.Services {
         StartingPrice = auction.StartingPrice,
         CurrentPrice = auction.CurrentPrice,
         Increment = auction.Increment,
-        Status = status,
+        Status = auction.Status,
         ImageUrl = auction.ImageUrl,
         EndDate = auction.EndDate,
         UserId = auction.User.Id

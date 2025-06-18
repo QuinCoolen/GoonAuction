@@ -106,7 +106,7 @@ namespace GoonAuctionBLL.Tests.Services
                 StartingPrice = 100,
                 CurrentPrice = 100,
                 Increment = 10,
-                Status = "Active",
+                Status = AuctionStatusDto.NotFinished,
                 ImageUrl = "image.jpg",
                 EndDate = DateTime.UtcNow.AddDays(7),
                 UserId = "1"
@@ -186,12 +186,12 @@ namespace GoonAuctionBLL.Tests.Services
         {
             // Arrange
             var auctionId = 1;
-            var newStatus = "Completed";
+            var newStatus = AuctionStatusDto.Paid;
             var existingAuction = new FullAuctionDto
             {
                 Id = auctionId,
                 Title = "Test Auction",
-                Status = "Active",
+                Status = AuctionStatusDto.NotFinished,
                 User = new UserDto { Id = "1", Username = "testuser" }
             };
 
