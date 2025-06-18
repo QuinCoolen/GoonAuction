@@ -46,6 +46,11 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
+      - name: Debug Sonar URL
+        shell: powershell
+        run: |
+          echo "Sonar URL is: ${{ secrets.SONAR_HOST_URL }}"
+
       - name: Build and analyze
         shell: powershell
         run: |
