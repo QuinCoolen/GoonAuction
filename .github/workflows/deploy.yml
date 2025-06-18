@@ -49,14 +49,14 @@ jobs:
       - name: Debug Sonar URL
         shell: powershell
         run: |
-          echo "Sonar URL is: ${{ secrets.SONAR_HOST_URL }}"
+          echo "Sonar URL is: https://sonarcloud.io"
 
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"goonauction" /o:"GoonAuction" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"goonauction" /o:"GoonAuction" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io"
 
       - name: Build the solution
         shell: powershell
