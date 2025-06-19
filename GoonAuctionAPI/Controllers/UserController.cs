@@ -3,6 +3,7 @@ using GoonAuctionBLL.Dto;
 using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace GoonAuctionAPI.Controllers
 {
@@ -59,6 +60,11 @@ namespace GoonAuctionAPI.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterUserDto userDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             _userService.CreateUser(userDto);
             return Ok(new { Message = "User created successfully" });
         }
