@@ -7,7 +7,7 @@ public class AuctionViewModel {
   public int StartingPrice { get; set; }
   public int CurrentPrice { get; set; }
   public int Increment { get; set; }
-  public AuctionStatusDto Status { get; set; }
+  public string Status { get; set; }
   public string ImageUrl { get; set; }
   public UserViewModel User { get; set; }
   public DateTime EndDate { get; set; }

@@ -40,7 +40,7 @@ namespace GoonAuctionAPI.Controllers
                 StartingPrice = auction.StartingPrice,
                 CurrentPrice = auction.CurrentPrice,
                 Increment = auction.Increment,
-                Status = auction.Status,
+                Status = auction.Status.ToString(),
                 ImageUrl = auction.ImageUrl,
                 EndDate = auction.EndDate,
                 User = new UserViewModel
@@ -127,7 +127,7 @@ namespace GoonAuctionAPI.Controllers
                 StartingPrice = auction.StartingPrice,
                 CurrentPrice = auction.CurrentPrice,
                 Increment = auction.Increment,
-                Status = auction.Status,
+                Status = auction.Status.ToString(),
                 ImageUrl = auction.ImageUrl,
                 User = new UserViewModel
                 {
