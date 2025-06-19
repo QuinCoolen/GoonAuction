@@ -4,6 +4,7 @@ using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace GoonAuctionAPI.Controllers
 {
@@ -22,10 +23,16 @@ namespace GoonAuctionAPI.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginUserDto model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             UserDto user = _userService.GetUserByEmail(model.Email);
+
             if (user == null)
             {
-                return Unauthorized();
+                return NotFound(new { Message = "User not found" });
             }
 
             var token = _authService.GenerateJwtToken(user);

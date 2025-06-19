@@ -26,7 +26,14 @@ namespace GoonAuctionBLL.Services
 
     public UserDto GetUserByEmail(string email)
     {
-      return _userRepository.GetUserByEmail(email);
+      UserDto user = _userRepository.GetUserByEmail(email);
+
+      if (user == null)
+      {
+        return null;
+      }
+      
+      return user;
     }
 
     public void CreateUser(RegisterUserDto EditUserDto)

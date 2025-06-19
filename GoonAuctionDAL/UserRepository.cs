@@ -44,7 +44,7 @@ namespace GoonAuctionDAL
 
       if (user == null)
       {
-        throw new Exception("User not found");
+        return null;
       }
 
       return new UserDto
