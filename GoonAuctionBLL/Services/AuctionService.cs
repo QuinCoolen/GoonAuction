@@ -88,7 +88,7 @@ namespace GoonAuctionBLL.Services {
         StartingPrice = auction.StartingPrice,
         CurrentPrice = auction.CurrentPrice,
         Increment = auction.Increment,
-        Status = auction.Status,
+        Status = status,
         ImageUrl = auction.ImageUrl,
         EndDate = auction.EndDate,
         UserId = auction.User.Id

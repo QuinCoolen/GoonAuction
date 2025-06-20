@@ -1,4 +1,5 @@
 using GoonAuctionBLL.Dto;
+using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
@@ -8,9 +9,9 @@ using Stripe.Checkout;
 [ApiController]
 public class CheckoutController : ControllerBase
 {
-  private readonly AuctionService _auctionService;
+  private readonly IAuctionService _auctionService;
 
-  public CheckoutController(AuctionService auctionService)
+  public CheckoutController(IAuctionService auctionService)
   {
       _auctionService = auctionService;
   }
