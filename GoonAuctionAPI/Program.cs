@@ -1,4 +1,5 @@
 using System.Text;
+using GoonAuctionAPI.BackgroundServices;
 using GoonAuctionAPI.Hubs;
 using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
@@ -35,6 +36,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<BidService>();
 builder.Services.AddScoped<IBidRepository, BidRepository>();
+
+builder.Services.AddHostedService<AuctionStatusWorker>();
 
 builder.Services.AddAuthentication(options =>
 {

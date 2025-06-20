@@ -161,5 +161,21 @@ namespace GoonAuctionDAL
 
       return true;
     }
+
+    public int UpdateExpiredAuctions()
+    {
+      var expiredAuctions = _context.Auctions
+        .Where(a => a.Status == AuctionStatus.NotFinished && a.End_date <= DateTime.UtcNow)
+        .ToList();
+
+      foreach (var auction in expiredAuctions)
+      {
+        auction.Status = AuctionStatus.Unpaid;
+      }
+
+      _context.SaveChanges();
+
+      return expiredAuctions.Count;
+    }
   }
 }
