@@ -25,9 +25,10 @@ namespace GoonAuctionDAL
     public UserDto GetUser(string id)
     {
       var user = _context.Users.Find(id);
+
       if (user == null)
       {
-        throw new Exception("User not found");
+        return null;
       }
 
       return new UserDto
@@ -78,7 +79,6 @@ namespace GoonAuctionDAL
 
       user.UserName = EditUserDto.UserName;
       user.Email = EditUserDto.Email;
-      user.PasswordHash = EditUserDto.Password;
 
       _context.SaveChanges();
     }

@@ -53,6 +53,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
       Id = "test-user-1",
       UserName = "testuser1",
       Email = "testuser1@example.com",
+      PasswordHash = "Password123!",
       EmailConfirmed = true,
       NormalizedUserName = "TESTUSER1",
       NormalizedEmail = "TESTUSER1@EXAMPLE.COM",
