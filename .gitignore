@@ -5,3 +5,4 @@ appsettings.json
 .vs
 .sonarqube
 coverage.xml
+.sonar
