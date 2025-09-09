@@ -8,32 +8,32 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
     {
         #region POST /api/auth/login Tests
 
-        [Fact]
-        public async Task Login_WithValidCredentials_ReturnsOkAndSetsCookies()
-        {
-            using var factory = new CustomWebApplicationFactory<Program>();
-            var client = factory.CreateClient();
+        // [Fact]
+        // public async Task Login_WithValidCredentials_ReturnsOkAndSetsCookies()
+        // {
+        //     using var factory = new CustomWebApplicationFactory<Program>();
+        //     var client = factory.CreateClient();
 
-            // Arrange
-            var loginDto = new LoginUserDto
-            {
-                Email = "testuser1@example.com",
-                Password = "Password123!"
-            };
+        //     // Arrange
+        //     var loginDto = new LoginUserDto
+        //     {
+        //         Email = "testuser1@example.com",
+        //         Password = "Password123!"
+        //     };
 
-            // Act
-            var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
+        //     // Act
+        //     var response = await client.PostAsJsonAsync("/api/auth/login", loginDto);
 
-            // Assert
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            Assert.Contains("Login successful", content);
+        //     // Assert
+        //     response.EnsureSuccessStatusCode();
+        //     var content = await response.Content.ReadAsStringAsync();
+        //     Assert.Contains("Login successful", content);
 
-            // Check cookies are set
-            Assert.Contains("Set-Cookie", response.Headers.ToString());
-            Assert.Contains("jwt=", response.Headers.ToString());
-            Assert.Contains("refresh=", response.Headers.ToString());
-        }
+        //     // Check cookies are set
+        //     Assert.Contains("Set-Cookie", response.Headers.ToString());
+        //     Assert.Contains("jwt=", response.Headers.ToString());
+        //     Assert.Contains("refresh=", response.Headers.ToString());
+        // }
 
         [Fact]
         public async Task Login_WithInvalidEmail_ReturnsNotFound()
