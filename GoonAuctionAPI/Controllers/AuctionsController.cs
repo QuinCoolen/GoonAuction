@@ -26,7 +26,6 @@ namespace GoonAuctionAPI.Controllers
             _auctionService = auctionService;
         }
 
-        // GET: api/Auctions
         [HttpGet]
         public List<AuctionViewModel> GetAuctions()
         {
