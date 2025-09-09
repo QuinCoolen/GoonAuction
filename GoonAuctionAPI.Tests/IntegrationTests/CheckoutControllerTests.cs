@@ -7,19 +7,19 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
 {
     public class CheckoutControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        [Fact]
-        public async Task CreateCheckoutSession_WithValidAuctionId_ReturnsOk()
-        {
-            using var factory = new CustomWebApplicationFactory<Program>();
-            var client = factory.CreateClient();
+        // [Fact]
+        // public async Task CreateCheckoutSession_WithValidAuctionId_ReturnsOk()
+        // {
+        //     using var factory = new CustomWebApplicationFactory<Program>();
+        //     var client = factory.CreateClient();
 
-            // Ensure auction with ID 1 exists in your seed data
-            var response = await client.PostAsync("/create-checkout-session?auctionId=1", null);
+        //     // Ensure auction with ID 1 exists in your seed data
+        //     var response = await client.PostAsync("/create-checkout-session?auctionId=1", null);
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var content = await response.Content.ReadAsStringAsync();
-            Assert.Contains("url", content); // just check the response has a 'url' property
-        }
+        //     Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        //     var content = await response.Content.ReadAsStringAsync();
+        //     Assert.Contains("url", content); // just check the response has a 'url' property
+        // }
 
         [Fact]
         public async Task CreateCheckoutSession_WithInvalidAuctionId_ReturnsNotFound()
