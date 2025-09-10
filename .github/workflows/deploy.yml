@@ -57,7 +57,6 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"QuinCoolen_GoonAuction" /o:"goonauction" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=.\coverage.xml "/d:sonar.scanner.skipJreProvisioning=true"
-          dotnet build --no-incremental
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   # ──────────────────────────────────────────────────────────────
