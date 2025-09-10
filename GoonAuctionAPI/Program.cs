@@ -45,7 +45,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    var jwtKey = builder.Configuration["Jwt:Key"] ?? "TestKey_12345678901234567890";
+    // Use same fallback key as AuthService to keep signing/validation consistent across environments (>=256 bits)
+    var jwtKey = builder.Configuration["Jwt:Key"] ?? "FallbackDevJwtKey_ChangeMe_32Bytes!!";
 
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -65,7 +66,7 @@ builder.Services.AddAuthentication(options =>
         {
             if (context.Exception is SecurityTokenExpiredException)
             {
-                context.Response.Headers.Add("Token-Expired", "true");
+                context.Response.Headers["Token-Expired"] = "true";
             }
             return Task.CompletedTask;
         },
