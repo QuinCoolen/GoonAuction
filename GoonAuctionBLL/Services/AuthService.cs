@@ -7,10 +7,11 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System;
 using System.Security.Cryptography;
+using GoonAuctionBLL.Interfaces;
 
 namespace GoonAuctionBLL.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
       private readonly IConfiguration _configuration;
 

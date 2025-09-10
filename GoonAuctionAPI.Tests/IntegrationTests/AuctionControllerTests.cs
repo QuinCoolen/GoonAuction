@@ -2,6 +2,9 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using GoonAuctionBLL.Dto;
+using GoonAuctionBLL.Interfaces;
+using GoonAuctionBLL.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GoonAuctionAPI.Tests.IntegrationTests
 {
@@ -96,18 +99,30 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
         {
             using var factory = new CustomWebApplicationFactory<Program>();
             var client = factory.CreateClient();
-            // Arrange
+
+            // Generate a real JWT using the same signing key & config as the API
+            using (var scope = factory.Services.CreateScope())
+            {
+                // Resolve the concrete AuthService (registered as scoped in Program.cs)
+                var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
+
+                var token = authService.GenerateJwtToken(new UserDto
+                {
+                    Id = "test-user-1",
+                    Username = "testuser1",
+                    Email = "testuser1@example.com"
+                });
+
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+
             var request = "/api/auctions/user";
-            // Note: This test would need proper authentication setup
-            // For now, it will fail with 401, which is expected behavior
 
             // Act
             var response = await client.GetAsync(request);
 
             // Assert
-            // This test demonstrates the authentication requirement
-            // In a real scenario, you would add authentication headers
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         #endregion
@@ -247,6 +262,27 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateAuction_WithNoAuction_ReturnsBadRequest()
+        {
+            using var factory = new CustomWebApplicationFactory<Program>();
+            var client = factory.CreateClient();
+            // Arrange
+            CreateEditAuctionDto? auctionDto = null;
+
+            var request = "/api/auctions";
+            var json = JsonSerializer.Serialize(auctionDto);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync(request, content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Assert.Contains("Auction data cannot be null.", responseContent);
         }
 
         [Fact]

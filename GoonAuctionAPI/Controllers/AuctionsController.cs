@@ -102,12 +102,12 @@ namespace GoonAuctionAPI.Controllers
 
         [Authorize]
         [HttpGet("user")]
-        public List<AuctionViewModel> GetAuctionByUser()
+        public IActionResult GetAuctionByUser()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
-                return null;
+                return Unauthorized();
             }
 
             List<AuctionDto> auctions = _auctionService.GetAuctionsByUserId(userId);
@@ -131,7 +131,7 @@ namespace GoonAuctionAPI.Controllers
                 EndDate = auction.EndDate,
             }).ToList();
 
-            return auctionViewModels;
+            return Ok(auctionViewModels);
         }
 
         [HttpPatch("{id}/status")]
