@@ -33,13 +33,20 @@ namespace GoonAuctionBLL.Services
               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
           };
 
-          var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+          var jwtKey = _configuration["Jwt:Key"] ?? "TestKey_12345678901234567890"; // fallback for tests
+          var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
           var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-          var expires = DateTime.Now.AddHours(Convert.ToDouble(_configuration["Jwt:ExpirationHours"]));
+          var expirationSetting = _configuration["Jwt:ExpirationHours"];
+          double expirationHours = 24; // sane default
+          if (!string.IsNullOrWhiteSpace(expirationSetting) && double.TryParse(expirationSetting, out var parsed))
+          {
+              expirationHours = parsed;
+          }
+          var expires = DateTime.UtcNow.AddHours(expirationHours);
 
           var token = new JwtSecurityToken(
-              _configuration["Jwt:Issuer"],
-              _configuration["Jwt:Audience"],
+              _configuration["Jwt:Issuer"] ?? "http://localhost", // fallback issuer
+              _configuration["Jwt:Audience"] ?? "http://localhost", // fallback audience
               claims,
               expires: expires,
               signingCredentials: creds

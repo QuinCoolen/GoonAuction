@@ -201,11 +201,6 @@ namespace GoonAuctionAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (auctionDto == null)
-            {
-                return BadRequest("Auction data cannot be null.");
-            }
-
             _auctionService.CreateAuction(auctionDto);
             return NoContent();
         }

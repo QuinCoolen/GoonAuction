@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using GoonAuctionBLL.Services;
+using GoonAuctionBLL.Interfaces;
 
 public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
 {
@@ -18,6 +20,10 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
       {
         options.UseInMemoryDatabase(_dbName);
       });
+
+  // Ensure required scoped services for controllers (in case original Program registrations change)
+  services.AddScoped<AuthService>();
+  services.AddScoped<UserService>();
 
       var sp = services.BuildServiceProvider();
 

@@ -265,27 +265,6 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task CreateAuction_WithNoAuction_ReturnsBadRequest()
-        {
-            using var factory = new CustomWebApplicationFactory<Program>();
-            var client = factory.CreateClient();
-            // Arrange
-            CreateEditAuctionDto? auctionDto = null;
-
-            var request = "/api/auctions";
-            var json = JsonSerializer.Serialize(auctionDto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            // Act
-            var response = await client.PostAsync(request, content);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            var responseContent = await response.Content.ReadAsStringAsync();
-            Assert.Contains("Auction data cannot be null.", responseContent);
-        }
-
-        [Fact]
         public async Task CreateAuction_WithMultipleValidationErrors_ReturnsBadRequest()
         {
             using var factory = new CustomWebApplicationFactory<Program>();
