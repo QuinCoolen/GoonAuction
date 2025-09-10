@@ -33,7 +33,11 @@ namespace GoonAuctionBLL.Services
               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
           };
 
-          var jwtKey = _configuration["Jwt:Key"] ?? "TestKey_12345678901234567890"; // fallback for tests
+          var jwtKey = _configuration["Jwt:Key"] ?? "FallbackDevJwtKey_ChangeMe_32Bytes!!"; // 32+ chars (>=256 bits)
+          if (Encoding.UTF8.GetByteCount(jwtKey) * 8 < 256)
+          {
+              throw new InvalidOperationException("JWT signing key length insufficient (<256 bits). Configure Jwt:Key with at least 32 bytes.");
+          }
           var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
           var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
           var expirationSetting = _configuration["Jwt:ExpirationHours"];
