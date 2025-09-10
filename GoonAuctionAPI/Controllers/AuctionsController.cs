@@ -197,12 +197,10 @@ namespace GoonAuctionAPI.Controllers
         public IActionResult PostAuction(CreateEditAuctionDto auctionDto)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            _auctionService.CreateAuction(auctionDto);
-            return NoContent();
+            var createdAuction = _auctionService.CreateAuction(auctionDto);
+            return CreatedAtAction(nameof(GetAuction), new { id = createdAuction.Id }, createdAuction);
         }
 
         // DELETE: api/Auctions/5
