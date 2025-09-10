@@ -46,7 +46,7 @@ jobs:
       - name: Run tests
         shell: powershell
         run: |
-          dotnet test --no-build --verbosity normal
+          dotnet test --verbosity normal
       - name: Run tests and collect coverage
         shell: powershell
         run: |
