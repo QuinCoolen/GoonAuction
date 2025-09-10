@@ -20,12 +20,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
       - name: Cache SonarQube Cloud packages
         uses: actions/cache@v4
         with:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache SonarQube Cloud scanner
         id: cache-sonar-scanner
         uses: actions/cache@v4
@@ -33,30 +35,44 @@ jobs:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
+
       - name: Install SonarQube Cloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
       - name: Install Dotnet Coverage Tool
         shell: powershell
         run: |
           dotnet tool install --global dotnet-coverage
-      - name: Run tests
-        shell: powershell
-        run: |
-          dotnet test --verbosity normal
-      - name: Run tests and collect coverage
-        shell: powershell
-        run: |
-          dotnet-coverage collect "dotnet test" -f xml -o ".\coverage.xml"
+
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"QuinCoolen_GoonAuction" /o:"goonauction" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=.\coverage.xml "/d:sonar.scanner.skipJreProvisioning=true"
+
+      - name: Run tests
+        shell: powershell
+        run: |
+          dotnet test --verbosity normal
+
+      - name: Run tests and collect coverage
+        shell: powershell
+        run: |
+          dotnet-coverage collect "dotnet test" -f xml -o ".\coverage.xml"
+
+      # - name: Build project
+      #   shell: powershell
+      #   run: |
+      #     dotnet build --no-restore --configuration Release
+
+      - name: End SonarQube analysis
+        shell: powershell
+        run: |
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   # ──────────────────────────────────────────────────────────────
