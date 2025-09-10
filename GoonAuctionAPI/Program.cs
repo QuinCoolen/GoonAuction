@@ -45,8 +45,9 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    // Use same fallback key as AuthService to keep signing/validation consistent across environments (>=256 bits)
     var jwtKey = builder.Configuration["Jwt:Key"] ?? "FallbackDevJwtKey_ChangeMe_32Bytes!!";
+    var issuer = builder.Configuration["Jwt:Issuer"] ?? "http://localhost";
+    var audience = builder.Configuration["Jwt:Audience"] ?? "http://localhost";
 
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -54,8 +55,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = issuer,
+        ValidAudience = audience,
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(jwtKey))
     };
