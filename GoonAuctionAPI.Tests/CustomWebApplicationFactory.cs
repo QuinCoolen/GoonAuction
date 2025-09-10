@@ -21,10 +21,6 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         options.UseInMemoryDatabase(_dbName);
       });
 
-  // Ensure required scoped services for controllers (in case original Program registrations change)
-  services.AddScoped<AuthService>();
-  services.AddScoped<UserService>();
-
       var sp = services.BuildServiceProvider();
 
       using var scope = sp.CreateScope();
