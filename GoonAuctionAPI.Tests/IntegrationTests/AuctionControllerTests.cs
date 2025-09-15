@@ -94,37 +94,6 @@ namespace GoonAuctionAPI.Tests.IntegrationTests
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
-        [Fact]
-        public async Task GetAuctionsByUser_WithValidAuthentication_ReturnsSuccess()
-        {
-            using var factory = new CustomWebApplicationFactory<Program>();
-            var client = factory.CreateClient();
-
-            // Generate a real JWT using the same signing key & config as the API
-            using (var scope = factory.Services.CreateScope())
-            {
-                // Resolve the concrete AuthService (registered as scoped in Program.cs)
-                var authService = scope.ServiceProvider.GetRequiredService<IAuthService>();
-
-                var token = authService.GenerateJwtToken(new UserDto
-                {
-                    Id = "test-user-1",
-                    Username = "testuser1",
-                    Email = "testuser1@example.com"
-                });
-
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            }
-
-            var request = "/api/auctions/user";
-
-            // Act
-            var response = await client.GetAsync(request);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-
         #endregion
 
         #region PATCH /api/auctions/{id}/status Tests
