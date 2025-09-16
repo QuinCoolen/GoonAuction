@@ -14,7 +14,7 @@ public static class DbSeeder
 
         await context.Database.MigrateAsync(ct);
 
-        const string username = "John Doe";
+        const string username = "John";
         const string email = "johndoe@example.com";
         const string password = "Passw0rd!";
 
