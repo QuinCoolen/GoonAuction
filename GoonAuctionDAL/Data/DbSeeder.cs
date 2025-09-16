@@ -12,10 +12,8 @@ public static class DbSeeder
         var context = scope.ServiceProvider.GetRequiredService<DbContext>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        // Ensure database is created/migrated
         await context.Database.MigrateAsync(ct);
 
-        // Seed a default user if it doesn't exist
         const string username = "John Doe";
         const string email = "johndoe@example.com";
         const string password = "Passw0rd!";
@@ -38,7 +36,6 @@ public static class DbSeeder
             }
         }
 
-        // Seed auctions if none exist
         if (!await context.Set<Auction>().AnyAsync(ct))
         {
             var now = DateTime.UtcNow;
