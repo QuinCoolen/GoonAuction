@@ -43,15 +43,5 @@ namespace GoonAuctionBLL.Services
 
             return _bidRepository.PlaceBid(bidDto);
         }
-
-        public BidDto GetBidsByAuctionId(string auctionId)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IBidService.PlaceBid(BidDto bidDto)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
