@@ -32,10 +32,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<IAuctionService, AuctionService>();
 builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<BidService>();
+builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddScoped<IBidRepository, BidRepository>();
 
 builder.Services.AddHostedService<AuctionStatusWorker>();

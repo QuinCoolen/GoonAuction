@@ -1,11 +1,11 @@
+using System;
+using System.Collections.Generic;
+using GoonAuctionBLL.Dto;
+using GoonAuctionBLL.Interfaces;
+
 namespace GoonAuctionBLL.Services
 {
-  using System;
-  using System.Collections.Generic;
-    using GoonAuctionBLL.Dto;
-    using GoonAuctionBLL.Interfaces;
-
-    public class BidService
+    public class BidService : IBidService
     {
         private readonly IBidRepository _bidRepository;
         private readonly IAuctionService _auctionService;
@@ -28,20 +28,30 @@ namespace GoonAuctionBLL.Services
 
         public bool PlaceBid(BidDto bidDto)
         {
-          var auction = _auctionService.GetAuction(bidDto.AuctionId);
-          if (auction == null || auction.EndDate < DateTime.UtcNow)
-          {
-              return false;
-          }
+            var auction = _auctionService.GetAuction(bidDto.AuctionId);
+            if (auction == null || auction.EndDate < DateTime.UtcNow)
+            {
+                return false;
+            }
 
-          if (bidDto.Amount <= auction.CurrentPrice)
-          {
-              return false;
-          }
+            if (bidDto.Amount <= auction.CurrentPrice)
+            {
+                return false;
+            }
 
-          _auctionService.UpdateCurrentPrice(bidDto.AuctionId, bidDto.Amount);
+            _auctionService.UpdateCurrentPrice(bidDto.AuctionId, bidDto.Amount);
 
-          return _bidRepository.PlaceBid(bidDto);
+            return _bidRepository.PlaceBid(bidDto);
+        }
+
+        public BidDto GetBidsByAuctionId(string auctionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IBidService.PlaceBid(BidDto bidDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

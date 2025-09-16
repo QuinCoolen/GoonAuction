@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using GoonAuctionBLL.Dto;
+using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -9,10 +10,10 @@ namespace GoonAuctionAPI.Hubs
   [Authorize]
   public class BidHub : Hub
   {
-    private readonly BidService _bidService;
-    private readonly UserService _userService;
+    private readonly IBidService _bidService;
+    private readonly IUserService _userService;
 
-    public BidHub(BidService bidService, UserService userService)
+    public BidHub(IBidService bidService, IUserService userService)
     {
       _bidService = bidService;
       _userService = userService;

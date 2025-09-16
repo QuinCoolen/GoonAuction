@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using GoonAuctionBLL.Dto;
+using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,8 @@ namespace GoonAuctionAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly AuthService _authService;
-        public AuthController(UserService userService, AuthService authService)
+        private readonly IAuthService _authService;
+        public AuthController(UserService userService, IAuthService authService)
         {
             _userService = userService;
             _authService = authService;

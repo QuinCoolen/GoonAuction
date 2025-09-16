@@ -33,7 +33,7 @@ namespace GoonAuctionBLL.Services
               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
           };
 
-          var jwtKey = _configuration["Jwt:Key"] ?? "FallbackDevJwtKey_ChangeMe_32Bytes!!"; // 32+ chars (>=256 bits)
+          var jwtKey = _configuration["Jwt:Key"] ?? "FallbackDevJwtKey_ChangeMe_32Bytes!!";
           if (Encoding.UTF8.GetByteCount(jwtKey) * 8 < 256)
           {
               throw new InvalidOperationException("JWT signing key length insufficient (<256 bits). Configure Jwt:Key with at least 32 bytes.");
@@ -41,7 +41,7 @@ namespace GoonAuctionBLL.Services
           var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
           var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
           var expirationSetting = _configuration["Jwt:ExpirationHours"];
-          double expirationHours = 24; // sane default
+          double expirationHours = 24;
           if (!string.IsNullOrWhiteSpace(expirationSetting) && double.TryParse(expirationSetting, out var parsed))
           {
               expirationHours = parsed;
@@ -49,8 +49,8 @@ namespace GoonAuctionBLL.Services
           var expires = DateTime.UtcNow.AddHours(expirationHours);
 
           var token = new JwtSecurityToken(
-              _configuration["Jwt:Issuer"] ?? "http://localhost", // fallback issuer
-              _configuration["Jwt:Audience"] ?? "http://localhost", // fallback audience
+              _configuration["Jwt:Issuer"] ?? "http://localhost",
+              _configuration["Jwt:Audience"] ?? "http://localhost",
               claims,
               expires: expires,
               signingCredentials: creds
