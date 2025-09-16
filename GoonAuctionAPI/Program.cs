@@ -4,6 +4,7 @@ using GoonAuctionAPI.Hubs;
 using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using GoonAuctionDAL;
+using GoonAuctionDAL.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -109,6 +110,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DbContext>();
     db.Database.Migrate();
+    await DbSeeder.SeedAsync(scope.ServiceProvider);
 }
 
 // Configure the HTTP request pipeline.
@@ -121,7 +123,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-StripeConfiguration.ApiKey = builder.Configuration["StripeConfigurtion:ApiKey"];
+StripeConfiguration.ApiKey = builder.Configuration["StripeConfiguration:ApiKey"];
 
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
