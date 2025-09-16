@@ -4,8 +4,6 @@ using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace GoonAuctionAPI.Controllers
 {
@@ -13,9 +11,9 @@ namespace GoonAuctionAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly IAuthService _authService;
-        public AuthController(UserService userService, IAuthService authService)
+        public AuthController(IUserService userService, IAuthService authService)
         {
             _userService = userService;
             _authService = authService;
