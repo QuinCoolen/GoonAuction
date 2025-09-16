@@ -4,6 +4,7 @@ using GoonAuctionAPI.Hubs;
 using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using GoonAuctionDAL;
+using GoonAuctionDAL.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -98,20 +99,31 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
-              .SetIsOriginAllowed(origin => true); // This is needed for SignalR negotiation
+              .SetIsOriginAllowed(origin => true);
     });
 });
 
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+await using (var scope = app.Services.CreateAsyncScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<DbContext>();
-    db.Database.Migrate();
+    if (!app.Environment.IsEnvironment("Testing"))
+    {
+        var db = scope.ServiceProvider.GetRequiredService<DbContext>();
+
+        if (db.Database.IsRelational())
+        {
+            await db.Database.MigrateAsync();
+            await DbSeeder.SeedAsync(scope.ServiceProvider);
+        }
+        else
+        {
+            await db.Database.EnsureCreatedAsync();
+        }
+    }
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -121,7 +133,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-StripeConfiguration.ApiKey = builder.Configuration["StripeConfigurtion:ApiKey"];
+StripeConfiguration.ApiKey = builder.Configuration["StripeConfiguration:ApiKey"];
 
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
