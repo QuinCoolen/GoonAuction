@@ -99,21 +99,31 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
-              .SetIsOriginAllowed(origin => true); // This is needed for SignalR negotiation
+              .SetIsOriginAllowed(origin => true);
     });
 });
 
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+await using (var scope = app.Services.CreateAsyncScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<DbContext>();
-    db.Database.Migrate();
-    await DbSeeder.SeedAsync(scope.ServiceProvider);
+    if (!app.Environment.IsEnvironment("Testing"))
+    {
+        var db = scope.ServiceProvider.GetRequiredService<DbContext>();
+
+        if (db.Database.IsRelational())
+        {
+            await db.Database.MigrateAsync();
+            await DbSeeder.SeedAsync(scope.ServiceProvider);
+        }
+        else
+        {
+            await db.Database.EnsureCreatedAsync();
+        }
+    }
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
