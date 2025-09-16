@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using GoonAuctionBLL.Dto;
+using GoonAuctionBLL.Interfaces;
 using GoonAuctionBLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,9 @@ namespace GoonAuctionAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }

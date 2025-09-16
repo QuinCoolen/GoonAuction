@@ -5,7 +5,7 @@ using GoonAuctionBLL.Interfaces;
 
 namespace GoonAuctionBLL.Services
 {
-  public class UserService
+  public class UserService : IUserService
   {
     private readonly IUserRepository _userRepository;
 
@@ -75,7 +75,7 @@ namespace GoonAuctionBLL.Services
       _userRepository.UpdateUser(user.Id, EditUserDto);
     }
 
-     public void UpdateRefreshToken(string userId, string refreshToken, DateTime expiry)
+    public void UpdateRefreshToken(string userId, string refreshToken, DateTime expiry)
     {
       UserDto user = _userRepository.GetUser(userId);
       if (user == null)
