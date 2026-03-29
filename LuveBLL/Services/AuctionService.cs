@@ -102,6 +102,11 @@ namespace LuveBLL.Services {
       return true;
     }
 
+    public List<AuctionDto> GetAuctionsCreatedByUserId(string userId)
+    {
+      return _auctionRepository.GetAuctionsByCreatorId(userId);
+    }
+
     public bool DeleteAuction(int id)
     {
       return _auctionRepository.DeleteAuction(id);

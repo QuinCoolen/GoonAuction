@@ -11,5 +11,6 @@ namespace LuveBLL.Interfaces
     AuctionDto UpdateAuction(int id, CreateEditAuctionDto createEditAuctionDto);
     bool DeleteAuction(int id);
     int UpdateExpiredAuctions();
+    List<AuctionDto> GetAuctionsByCreatorId(string userId);
   }
 }
