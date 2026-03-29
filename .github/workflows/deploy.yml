@@ -53,7 +53,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"QuinCoolen_GoonAuction" /o:"goonauction" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=.\coverage.xml "/d:sonar.scanner.skipJreProvisioning=true"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"QuinCoolen_LuveAPI" /o:"luve" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=.\coverage.xml "/d:sonar.scanner.skipJreProvisioning=true"
 
       - name: Run tests
         shell: powershell
@@ -99,4 +99,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: quinc/goonauctionapi:latest
+          tags: quinc/luveapi:latest
