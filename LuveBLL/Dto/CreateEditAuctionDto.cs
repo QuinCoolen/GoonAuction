@@ -1,10 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LuveBLL.Dto {
-  public class CreateEditAuctionDto {
-    
-    [Required(ErrorMessage = "Title is required.")]
+namespace LuveBLL.Dto
+{
+  public class CreateEditAuctionDto
+  {
+
+    [Required(ErrorMessage = "Title is requiredd.")]
     [StringLength(100, ErrorMessage = "Title cannot be longer than 100 characters.")]
     public string Title { get; set; }
     [Required(ErrorMessage = "Description is required.")]

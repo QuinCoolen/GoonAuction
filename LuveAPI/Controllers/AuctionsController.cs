@@ -134,6 +134,40 @@ namespace LuveAPI.Controllers
             return Ok(auctionViewModels);
         }
 
+        [Authorize]
+        [HttpGet("user/created")]
+        public IActionResult GetAuctionsCreatedByUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            List<AuctionDto> auctions = _auctionService.GetAuctionsCreatedByUserId(userId);
+
+            List<AuctionViewModel> auctionViewModels = auctions.Select(auction => new AuctionViewModel
+            {
+                Id = auction.Id,
+                Title = auction.Title,
+                Description = auction.Description,
+                StartingPrice = auction.StartingPrice,
+                CurrentPrice = auction.CurrentPrice,
+                Increment = auction.Increment,
+                Status = auction.Status,
+                ImageUrl = auction.ImageUrl,
+                User = new UserViewModel
+                {
+                    Id = auction.User.Id,
+                    Username = auction.User.Username,
+                    Email = auction.User.Email,
+                },
+                EndDate = auction.EndDate,
+            }).ToList();
+
+            return Ok(auctionViewModels);
+        }
+
         [HttpPatch("{id}/status")]
         public IActionResult UpdateAuctionStatus(int id, string status)
         {

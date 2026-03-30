@@ -162,6 +162,35 @@ namespace LuveDAL
       return true;
     }
 
+    public List<AuctionDto> GetAuctionsByCreatorId(string userId)
+    {
+      var auctions = _context.Auctions
+        .Where(a => a.UserId == userId)
+        .Include(a => a.User)
+        .ToList();
+
+      List<AuctionDto> auctionDtos = auctions.Select(auction => new AuctionDto
+      {
+          Id = auction.Id,
+          Title = auction.Title,
+          Description = auction.Description,
+          StartingPrice = auction.Starting_price,
+          CurrentPrice = auction.Current_price,
+          Increment = auction.Increment,
+          Status = (AuctionStatusDto)auction.Status,
+          ImageUrl = auction.Image_url,
+          User = new UserDto
+          {
+            Id = auction.User.Id,
+            Username = auction.User.UserName,
+            Email = auction.User.Email,
+          },
+          EndDate = auction.End_date,
+      }).ToList();
+
+      return auctionDtos;
+    }
+
     public int UpdateExpiredAuctions()
     {
       var expiredAuctions = _context.Auctions

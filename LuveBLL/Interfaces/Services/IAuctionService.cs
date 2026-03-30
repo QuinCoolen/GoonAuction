@@ -13,5 +13,6 @@ namespace LuveBLL.Interfaces
         bool UpdateCurrentPrice(int id, int currentPrice);
         bool UpdateAuctionStatus(int id, AuctionStatusDto status);
         bool DeleteAuction(int id);
+        List<AuctionDto> GetAuctionsCreatedByUserId(string userId);
     }
 } 
